@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/news_title"
+        android:id="@+id/article_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/title"
@@ -17,34 +17,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/news_description"
+        android:id="@+id/article_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
         android:text="@string/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/news_title" />
+        app:layout_constraintTop_toBottomOf="@+id/article_title" />
 
     <TextView
-        android:id="@+id/news_date"
+        android:id="@+id/article_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/_05_02_2021"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/news_description" />
+        app:layout_constraintTop_toBottomOf="@+id/article_description" />
 
     <ImageView
-        android:id="@+id/news_image"
+        android:id="@+id/article_image"
         android:layout_width="588dp"
         android:layout_height="287dp"
         android:layout_marginTop="@dimen/margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/news_date"
+        app:layout_constraintTop_toBottomOf="@+id/article_date"
         tools:srcCompat="@tools:sample/backgrounds/scenic"
         android:contentDescription="@string/content_description" />
 
