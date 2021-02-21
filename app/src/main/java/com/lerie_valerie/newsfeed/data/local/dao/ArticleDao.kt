@@ -9,12 +9,21 @@ import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 
 @Dao
 interface ArticleDao {
+//    @Insert(onConflict = OnConflictStrategy.IGNORE)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticleList(articleList: List<ArticleModel>)
 
-    @Query("SELECT * FROM article ORDER BY date DESC")
+//    @Query("SELECT * FROM article ORDER BY id")
+//    fun getArticle(): PagingSource<Int, ArticleModel>
+    @Query("SELECT * FROM article ORDER BY `key`, id")
     fun getArticle(): PagingSource<Int, ArticleModel>
-//    fun getArticle(): List<ArticleModel>
+
+    @Query("SELECT * FROM article WHERE `key` = :key ORDER BY id")
+    suspend fun getArticleByKey(key: Int): List<ArticleModel>
+
+//    @Query("SELECT * FROM article ORDER BY date DESC")
+//    fun getArticleById(): PagingSource<Int, ArticleModel>
+////    fun getArticle(): List<ArticleModel>
 
     @Query("DELETE FROM article")
     suspend fun deleteAllArticle()

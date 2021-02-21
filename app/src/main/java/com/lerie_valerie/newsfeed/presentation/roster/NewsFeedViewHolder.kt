@@ -16,11 +16,13 @@ class NewsFeedViewHolder(
     }
 
     fun bind(article: Article) {
+        println("${article.id} ${article.key} article")
         this.article = article
         binding.apply {
             articleTitle.text = article.title
             articleDate.text = article.date
             articleDescription.text = article.description
+            articleKey.text = "${article.id} ${article.key}"
         }
     }
 }

@@ -3,17 +3,24 @@ package com.lerie_valerie.newsfeed.presentation.roster
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import com.lerie_valerie.newsfeed.domain.entity.Article
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class NewsFeedRosterFragment: Fragment() {
-    private lateinit var viewModel: NewsFeedRosterViewModel
-//    by viewModel()
+    private val viewModel: NewsFeedRosterViewModel by viewModels()
+
+    //    by viewModel()
     private lateinit var binding: FragmentNewsFeedRosterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +44,43 @@ class NewsFeedRosterFragment: Fragment() {
                         onRowClick = ::display
                 )
 
+        binding.article.apply {
+            adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
-//        viewModel.loadWorker().collectLatest { pagingData ->
-//            adapter.submitData(pagingData)
-//        }
+            setAdapter(adapter)
+            layoutManager = LinearLayoutManager(context)
 
-        viewModel.loadArticle().asLiveData().observe(viewLifecycleOwner) { pagingData ->
-            adapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+            addItemDecoration(
+                DividerItemDecoration(
+                    activity,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
+
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.loadArticle().collectLatest { pagingData ->
+                adapter.submitData(pagingData)
+            }
+        }
+
+
+//        viewModel.loadArticleLiveData().observe(viewLifecycleOwner) {
+//            adapter.submitData(lifecycle, it)
+//        }
+//        binding.article.scrollToPosition(5)
+//
+//        binding.article.adapter = adapter
+//        binding.article.adapter = adapter.withLoadStateHeaderAndFooter(
+//            header = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() },
+//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }
+//        )
+
+
+//        viewModel.loadArticle().asLiveData().observe(viewLifecycleOwner) { pagingData ->
+//            adapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+//        }
 
 //        private fun fetchPosts() {
 //            lifecycleScope.launch {
@@ -94,4 +130,12 @@ class NewsFeedRosterFragment: Fragment() {
                         )
                 )
     }
+
+//    private fun setupViews() {
+//        binding.article.adapter = redditAdapter
+//        binding.article.adapter = redditAdapter.withLoadStateHeaderAndFooter(
+//            header = NewsFeedLoadingAdapter { redditAdapter.retry() },
+//            footer = NewsFeedLoadingAdapter { redditAdapter.retry() }
+//        )
+//    }
 }

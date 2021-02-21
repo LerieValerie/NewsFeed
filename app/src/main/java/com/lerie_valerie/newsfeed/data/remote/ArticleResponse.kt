@@ -10,8 +10,9 @@ data class ArticleResponse(
     @SerializedName("urlToImage") val urlToImage: String?,
     @SerializedName("url") val url: String?
 ) {
-    fun toEntity(id: Int): Article = Article(
+    fun toEntity(id: Int, key: Int): Article = Article(
             id = id,
+        key = key,
             title = title,
             description = description,
             date = date,

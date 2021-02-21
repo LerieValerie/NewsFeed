@@ -12,7 +12,7 @@ interface NetInterface {
         @Query("from") from: String?,
         @Query("sortBy") sortBy: String?,
         @Query("apiKey") apiKey: String?,
-        @Query("page") page: Int,
+        @Query("page") page: Int?,
         @Query("pageSize") pageSize: Int
     ): FeedResponse
 }

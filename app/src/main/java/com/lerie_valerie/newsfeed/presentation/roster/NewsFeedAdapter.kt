@@ -29,10 +29,12 @@ class NewsFeedAdapter(
 
 private object DiffCallback : DiffUtil.ItemCallback<Article>() {
     override fun areItemsTheSame(oldItem: Article, newItem: Article) =
-            oldItem.id == newItem.id
+            oldItem.id == newItem.id &&
+                    oldItem.key == newItem.key
 
     override fun areContentsTheSame(oldItem: Article, newItem: Article) =
-            oldItem.title == newItem.title
+            oldItem.title == newItem.title &&
+                    oldItem.urlToImage == newItem.urlToImage
 }
 
 

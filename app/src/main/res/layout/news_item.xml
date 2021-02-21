@@ -41,11 +41,22 @@
         android:layout_width="588dp"
         android:layout_height="287dp"
         android:layout_marginTop="@dimen/margin"
+        android:contentDescription="@string/content_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/article_date"
-        tools:srcCompat="@tools:sample/backgrounds/scenic"
-        android:contentDescription="@string/content_description" />
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/article_key"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/article_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
