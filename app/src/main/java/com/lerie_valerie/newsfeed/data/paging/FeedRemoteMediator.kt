@@ -35,8 +35,8 @@ class FeedRemoteMediator @Inject constructor(
 //                    from = C_From,
                     sortBy = "publi shedAt",
 //                    sortBy = C_Sort,
-                    apiKey = "26eddb253e7840f988aec61f2ece2907",
-//                    apiKey = "2bb5f673d126444da2ed6b70a0fc5b1d",
+//                    apiKey = "26eddb253e7840f988aec61f2ece2907",
+                    apiKey = "2bb5f673d126444da2ed6b70a0fc5b1d",
 //                    apiKey = C_ApiKey,
                     page = page,
 //                    pageSize = when (loadType) {
@@ -56,13 +56,15 @@ class FeedRemoteMediator @Inject constructor(
 //                    }
 //                }
 
-                val prevKey = if (page == C_Default_Page) null else page.minus(1)
-                val nextKey = if (isEndOfPaginationReached) null else page.plus(1)
+                if ((loadType == LoadType.REFRESH && page == C_Default_Page) || loadType != LoadType.REFRESH) {
+                    val prevKey = if (page == C_Default_Page) null else page.minus(1)
+                    val nextKey = if (isEndOfPaginationReached) null else page.plus(1)
 
-                val articleModelList = response.toArticleList(page).map { it.toModel() }
+                    val articleModelList = response.toArticleList(page).map { it.toModel() }
 
-                db.keyDao().insertKey(KeyModel(page, prevKey, nextKey))
-                db.articleDao().insertArticleList(articleModelList)
+                    db.keyDao().insertKey(KeyModel(page, prevKey, nextKey))
+                    db.articleDao().insertArticleList(articleModelList)
+                }
 
                 MediatorResult.Success(endOfPaginationReached = isEndOfPaginationReached)
             }
@@ -103,8 +105,24 @@ class FeedRemoteMediator @Inject constructor(
     private suspend fun getKeyPage(loadType: LoadType, state: PagingState<Int, ArticleModel>) =
         when (loadType) {
             LoadType.REFRESH -> {
-                val keyModel = getKeyClosestToCurrentItem(state)
-                keyModel?.next?.minus(1) ?: C_Default_Page
+//                val keyModel = getKeyClosestToCurrentItem(state)
+//
+//                println("${keyModel?.id} keyClosest")
+//
+//                val keyModel1 = getKeyLastItem(state)
+//
+//                println("${keyModel1?.id} keyLast")
+//                println("${state.pages.lastIndex} pages")
+
+                val keyModel = getKey()
+//                if (keyModel != null) {
+//                    null
+//                }
+//                else
+//                    C_Default_Page
+
+                keyModel?.id ?: C_Default_Page
+//                keyModel?.next?.minus(1) ?: C_Default_Page
 //                C_Default_Page
             }
             LoadType.PREPEND -> {

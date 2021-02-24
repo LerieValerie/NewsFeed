@@ -26,7 +26,7 @@ class ArticleFromRemoteToLocalRepositoryImpl @Inject constructor(
 //                pagingSourceFactory = { FeedPagingSource(db) }
 //        ).flow
         val pagingArticleModel = Pager(
-                PagingConfig(pageSize = 5, enablePlaceholders = true, prefetchDistance = 5),
+                PagingConfig(pageSize = 5, enablePlaceholders = true, prefetchDistance = 2),
                 remoteMediator = remoteMediator,
                 pagingSourceFactory = { db.articleDao().getArticle() }
         ).flow

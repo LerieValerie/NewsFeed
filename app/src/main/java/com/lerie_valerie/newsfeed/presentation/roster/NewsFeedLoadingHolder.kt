@@ -17,7 +17,7 @@ class NewsFeedLoadingHolder(
 
     init {
         binding.btnRetry.setOnClickListener {
-            retry.invoke()
+            retry()
         }
     }
 

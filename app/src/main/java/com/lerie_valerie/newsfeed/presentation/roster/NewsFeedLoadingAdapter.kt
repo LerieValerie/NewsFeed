@@ -27,6 +27,7 @@ class NewsFeedLoadingAdapter(
         parent: ViewGroup,
         loadState: LoadState
     ) = NewsFeedLoadingHolder (
+//        LoadingStateBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         LoadingStateBinding.inflate(inflater, parent, false),
         retry
     )

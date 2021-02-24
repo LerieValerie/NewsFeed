@@ -71,7 +71,10 @@ class NewsFeedRosterFragment: Fragment() {
 //        }
 //        binding.article.scrollToPosition(5)
 //
-//        binding.article.adapter = adapter
+        binding.article.adapter = adapter
+        binding.article.adapter = adapter.withLoadStateFooter(
+            footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }
+        )
 //        binding.article.adapter = adapter.withLoadStateHeaderAndFooter(
 //            header = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() },
 //            footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }

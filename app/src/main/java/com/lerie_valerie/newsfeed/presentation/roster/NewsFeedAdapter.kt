@@ -33,8 +33,9 @@ private object DiffCallback : DiffUtil.ItemCallback<Article>() {
                     oldItem.key == newItem.key
 
     override fun areContentsTheSame(oldItem: Article, newItem: Article) =
-            oldItem.title == newItem.title &&
-                    oldItem.urlToImage == newItem.urlToImage
+        oldItem == newItem
+//            oldItem.title == newItem.title &&
+//                    oldItem.urlToImage == newItem.urlToImage
 }
 
 

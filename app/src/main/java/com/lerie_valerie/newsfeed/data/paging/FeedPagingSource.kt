@@ -2,6 +2,7 @@ package com.lerie_valerie.newsfeed.data.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import retrofit2.HttpException
@@ -35,6 +36,10 @@ class FeedPagingSource @Inject constructor(private val db: NewsFeedDatabase) :
         } catch (exception: HttpException) {
             return LoadResult.Error(exception)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, ArticleModel>): Int? {
+        TODO("Not yet implemented")
     }
 
 }
