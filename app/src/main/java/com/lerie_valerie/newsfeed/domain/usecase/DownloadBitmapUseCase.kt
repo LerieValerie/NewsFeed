@@ -1,7 +1,7 @@
-package com.lerie_valerie.newsfeed.data.remote.coil.repository
+package com.lerie_valerie.newsfeed.domain.usecase
 
-import coil.ImageLoader
 import coil.request.ImageRequest
+import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
 import javax.inject.Inject
 
 class DownloadBitmapUseCase @Inject constructor(private val bitmapRepository: BitmapRepository){

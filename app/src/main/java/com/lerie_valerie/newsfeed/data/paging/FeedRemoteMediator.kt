@@ -9,10 +9,10 @@ import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
-import com.lerie_valerie.newsfeed.data.remote.coil.CoilRequest
-import com.lerie_valerie.newsfeed.data.remote.coil.repository.DownloadBitmapUseCase
-import com.lerie_valerie.newsfeed.data.remote.coil.repository.SaveBitmapUseCase
+import com.lerie_valerie.newsfeed.data.coil.CoilRequest
 import com.lerie_valerie.newsfeed.data.remote.retrofit.NetInterface
+import com.lerie_valerie.newsfeed.domain.usecase.DownloadBitmapUseCase
+import com.lerie_valerie.newsfeed.domain.usecase.SaveBitmapUseCase
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -68,10 +68,12 @@ class FeedRemoteMediator @Inject constructor(
 
                     val articleModelList = response.toArticleList(page).map { it.toModel() }
 
+                    imageDownloadSave(articleModelList)
+
                     db.keyDao().insertKey(KeyModel(page, prevKey, nextKey))
                     db.articleDao().insertArticleList(articleModelList)
 
-                    imageDownloadSave(articleModelList)
+//                    imageDownloadSave(articleModelList)
 
 //                    val a = articleModelList.map { it -> it.urlToImage?.let {
 //                            url -> imageRequest.getImageRequest(url)
@@ -177,11 +179,12 @@ class FeedRemoteMediator @Inject constructor(
         for (article in articleList) {
             val request = article.urlToImage?.let { imageRequest.getImageRequest(it) }
             val bitmap = request?.let { downloadBitmap(request) }
+//            println("$bitmap ${article.id} ${article.key} bitmap")
             bitmap?.let {
-                val imageName = article.urlToImage?.let {
-                    url -> url.substring(url.lastIndexOf('/') + 1, url.length)
-                }
-                saveBitmap(it, imageName)
+//                val imageName = article.urlToImage?.let {
+//                    url -> url.substring(url.lastIndexOf('/') + 1, url.length)
+//                }
+                article.imageName?.let { imageName -> saveBitmap(it, imageName) }
             }
         }
     }

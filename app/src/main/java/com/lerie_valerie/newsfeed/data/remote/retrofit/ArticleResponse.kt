@@ -1,6 +1,7 @@
 package com.lerie_valerie.newsfeed.data.remote.retrofit
 
 import com.google.gson.annotations.SerializedName
+import com.lerie_valerie.newsfeed.data.remote.formatter.ImageNameFormatter.Companion.getImageName
 import com.lerie_valerie.newsfeed.domain.entity.Article
 
 data class ArticleResponse(
@@ -11,12 +12,13 @@ data class ArticleResponse(
     @SerializedName("url") val url: String?
 ) {
     fun toEntity(id: Int, key: Int): Article = Article(
-            id = id,
+        id = id,
         key = key,
-            title = title,
-            description = description,
-            date = date,
-            urlToImage = urlToImage,
-            url = url
+        title = title,
+        description = description,
+        date = date,
+        urlToImage = urlToImage,
+        imageName = getImageName(urlToImage),
+        url = url
     )
 }

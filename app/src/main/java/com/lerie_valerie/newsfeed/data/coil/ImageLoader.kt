@@ -1,4 +1,4 @@
-package com.lerie_valerie.newsfeed.data.remote.coil
+package com.lerie_valerie.newsfeed.data.coil
 
 import android.content.Context
 import coil.Coil

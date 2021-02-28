@@ -10,6 +10,7 @@ fun Article.toModel() = ArticleModel(
         description = description,
         date = date,
         urlToImage = urlToImage,
+        imageName = imageName,
         url = url
 )
 
@@ -20,5 +21,6 @@ fun ArticleModel.toEntity() = Article(
         description = description,
         date = date,
         urlToImage = urlToImage,
+        imageName = imageName,
         url = url
 )

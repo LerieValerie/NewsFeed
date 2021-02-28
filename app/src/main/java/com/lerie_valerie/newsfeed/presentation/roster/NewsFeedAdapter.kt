@@ -1,5 +1,6 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +13,16 @@ import com.lerie_valerie.newsfeed.domain.entity.Article
 
 class NewsFeedAdapter(
         private val inflater: LayoutInflater,
-        private val onRowClick: (Article) -> Unit) :
+        private val onRowClick: (Article) -> Unit,
+        private val imageShow: (Article) -> Bitmap?
+) :
         PagingDataAdapter<Article, NewsFeedViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             NewsFeedViewHolder (
             NewsItemBinding.inflate(inflater, parent, false),
-                    onRowClick
+                    onRowClick,
+                imageShow
     )
 
     override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {

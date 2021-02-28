@@ -15,5 +15,6 @@ data class ArticleModel(
     val date: String?,
 //    val date: Long?,
     val urlToImage: String?,
+    val imageName: String?,
     val url:String?
 )

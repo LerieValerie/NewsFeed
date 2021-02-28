@@ -1,5 +1,6 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
@@ -50,7 +51,8 @@ class NewsFeedRosterFragment: Fragment() {
         val adapter =
                 NewsFeedAdapter(
                         layoutInflater,
-                        onRowClick = ::display
+                        onRowClick = ::display,
+                    imageShow = ::imageShow
                 )
 
         binding.article.apply {
@@ -139,9 +141,13 @@ class NewsFeedRosterFragment: Fragment() {
         findNavController()
                 .navigate(
                         NewsFeedRosterFragmentDirections.actionDetail(
+                            article.url
                         )
                 )
     }
+
+    private fun imageShow(article: Article) : Bitmap? =
+        viewModel.getImageFromStorage(article.imageName)
 
 //    private fun setupViews() {
 //        binding.article.adapter = redditAdapter

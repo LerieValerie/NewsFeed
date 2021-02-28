@@ -14,5 +14,10 @@
     <fragment
         android:id="@+id/newsDetailFragment"
         android:name="com.lerie_valerie.newsfeed.presentation.detail.NewsDetailFragment"
-        android:label="News Details" />
+        android:label="News Details" >
+        <argument
+            android:name="articleUrl"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

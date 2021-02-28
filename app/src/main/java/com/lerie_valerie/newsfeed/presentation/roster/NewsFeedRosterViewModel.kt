@@ -4,6 +4,7 @@ import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import coil.request.ImageRequest
+import com.lerie_valerie.newsfeed.domain.usecase.GetBitmapFromStorageUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsFeedRosterViewModel @Inject constructor(
-    private val loadArticleRemote: GetPagingArticleUseCase
+    private val loadArticleRemote: GetPagingArticleUseCase,
+    private val getBitmapFromStorage: GetBitmapFromStorageUseCase
 ) : ViewModel() {
 
     fun loadArticle() =
@@ -25,6 +27,8 @@ class NewsFeedRosterViewModel @Inject constructor(
 
     fun loadArticleLiveData() =
         loadArticleRemote().cachedIn(viewModelScope).asLiveData()
+
+    fun getImageFromStorage(imageName: String?) = getBitmapFromStorage(imageName)
 
 
 

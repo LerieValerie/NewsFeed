@@ -1,7 +1,7 @@
-package com.lerie_valerie.newsfeed.data.remote.coil.repository
+package com.lerie_valerie.newsfeed.domain.usecase
 
 import android.graphics.Bitmap
-import coil.ImageLoader
+import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
 import javax.inject.Inject
 
 class SaveBitmapUseCase @Inject constructor(private val bitmapRepository: BitmapRepository) {
