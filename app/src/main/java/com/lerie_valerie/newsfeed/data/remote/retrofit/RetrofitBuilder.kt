@@ -1,4 +1,4 @@
-package com.lerie_valerie.newsfeed.data.remote
+package com.lerie_valerie.newsfeed.data.remote.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

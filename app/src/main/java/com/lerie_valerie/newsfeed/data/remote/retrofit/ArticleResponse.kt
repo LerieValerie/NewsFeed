@@ -1,4 +1,4 @@
-package com.lerie_valerie.newsfeed.data.remote
+package com.lerie_valerie.newsfeed.data.remote.retrofit
 
 import com.google.gson.annotations.SerializedName
 import com.lerie_valerie.newsfeed.domain.entity.Article

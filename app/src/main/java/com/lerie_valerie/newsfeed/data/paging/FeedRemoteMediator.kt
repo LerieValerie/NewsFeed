@@ -9,7 +9,10 @@ import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
-import com.lerie_valerie.newsfeed.data.remote.NetInterface
+import com.lerie_valerie.newsfeed.data.remote.coil.CoilRequest
+import com.lerie_valerie.newsfeed.data.remote.coil.repository.DownloadBitmapUseCase
+import com.lerie_valerie.newsfeed.data.remote.coil.repository.SaveBitmapUseCase
+import com.lerie_valerie.newsfeed.data.remote.retrofit.NetInterface
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -18,8 +21,11 @@ const val C_Default_Page = 1
 
 @OptIn(ExperimentalPagingApi::class)
 class FeedRemoteMediator @Inject constructor(
-        private val api: NetInterface,
-        private val db: NewsFeedDatabase
+    private val api: NetInterface,
+    private val db: NewsFeedDatabase,
+    private val imageRequest: CoilRequest,
+    private val downloadBitmap: DownloadBitmapUseCase,
+    private val saveBitmap: SaveBitmapUseCase
 ) : RemoteMediator<Int, ArticleModel>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, ArticleModel>): MediatorResult {
 
@@ -64,6 +70,16 @@ class FeedRemoteMediator @Inject constructor(
 
                     db.keyDao().insertKey(KeyModel(page, prevKey, nextKey))
                     db.articleDao().insertArticleList(articleModelList)
+
+                    imageDownloadSave(articleModelList)
+
+//                    val a = articleModelList.map { it -> it.urlToImage?.let {
+//                            url -> imageRequest.getImageRequest(url)
+//                    }
+//                    }
+//                    with(articleModelList) { it -> imageRequest.getImageRequest(it) }
+//                    imageRequest.getImageRequest()
+//                    downloadBitmap()
                 }
 
                 MediatorResult.Success(endOfPaginationReached = isEndOfPaginationReached)
@@ -156,4 +172,17 @@ class FeedRemoteMediator @Inject constructor(
 //            remoteKeys.prevKey
 //        }
 //    }
+
+    private suspend fun imageDownloadSave(articleList : List<ArticleModel>) {
+        for (article in articleList) {
+            val request = article.urlToImage?.let { imageRequest.getImageRequest(it) }
+            val bitmap = request?.let { downloadBitmap(request) }
+            bitmap?.let {
+                val imageName = article.urlToImage?.let {
+                    url -> url.substring(url.lastIndexOf('/') + 1, url.length)
+                }
+                saveBitmap(it, imageName)
+            }
+        }
+    }
 }

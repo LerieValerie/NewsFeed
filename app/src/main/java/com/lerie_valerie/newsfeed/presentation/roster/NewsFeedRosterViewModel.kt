@@ -1,10 +1,9 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import android.graphics.drawable.BitmapDrawable
+import androidx.lifecycle.*
 import androidx.paging.cachedIn
+import coil.request.ImageRequest
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -26,6 +25,8 @@ class NewsFeedRosterViewModel @Inject constructor(
 
     fun loadArticleLiveData() =
         loadArticleRemote().cachedIn(viewModelScope).asLiveData()
+
+
 
 
 //    fun refresh() {

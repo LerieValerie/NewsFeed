@@ -1,8 +1,9 @@
-package com.lerie_valerie.newsfeed.data.paging
+package com.lerie_valerie.newsfeed.data.paging.repository
 
 import androidx.paging.*
 import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.converter.toEntity
+import com.lerie_valerie.newsfeed.data.paging.FeedRemoteMediator
 import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.domain.repository.ArticleFromRemoteToLocalRepository
 import kotlinx.coroutines.flow.Flow
