@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lerie_valerie.newsfeed.databinding.NewsItemBinding
 import com.lerie_valerie.newsfeed.domain.entity.Article
+import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 
 class NewsFeedAdapter(
         private val inflater: LayoutInflater,
-        private val onRowClick: (Article) -> Unit,
-        private val imageShow: (Article) -> Bitmap?
+        private val onRowClick: (ArticleView) -> Unit,
+        private val imageShow: (ArticleView) -> Bitmap?
 ) :
-        PagingDataAdapter<Article, NewsFeedViewHolder>(DiffCallback) {
+        PagingDataAdapter<ArticleView, NewsFeedViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             NewsFeedViewHolder (
@@ -31,12 +32,12 @@ class NewsFeedAdapter(
 }
 
 
-private object DiffCallback : DiffUtil.ItemCallback<Article>() {
-    override fun areItemsTheSame(oldItem: Article, newItem: Article) =
+private object DiffCallback : DiffUtil.ItemCallback<ArticleView>() {
+    override fun areItemsTheSame(oldItem: ArticleView, newItem: ArticleView) =
             oldItem.id == newItem.id &&
                     oldItem.key == newItem.key
 
-    override fun areContentsTheSame(oldItem: Article, newItem: Article) =
+    override fun areContentsTheSame(oldItem: ArticleView, newItem: ArticleView) =
         oldItem == newItem
 //            oldItem.title == newItem.title &&
 //                    oldItem.urlToImage == newItem.urlToImage

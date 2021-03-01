@@ -4,20 +4,21 @@ import android.graphics.Bitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.lerie_valerie.newsfeed.databinding.NewsItemBinding
 import com.lerie_valerie.newsfeed.domain.entity.Article
+import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 
 class NewsFeedViewHolder(
         private val binding: NewsItemBinding,
-        private val onRowClick: (Article) -> Unit,
-        private val imageShow: (Article) -> Bitmap?
+        private val onRowClick: (ArticleView) -> Unit,
+        private val imageShow: (ArticleView) -> Bitmap?
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private lateinit var article: Article
+    private lateinit var article: ArticleView
 
         init {
         binding.root.setOnClickListener { onRowClick(article) }
     }
 
-    fun bind(article: Article) {
+    fun bind(article: ArticleView) {
         println("${article.id} ${article.key} article")
         this.article = article
         binding.apply {

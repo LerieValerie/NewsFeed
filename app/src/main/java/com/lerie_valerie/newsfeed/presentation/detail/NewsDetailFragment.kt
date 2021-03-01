@@ -26,49 +26,11 @@ class NewsDetailFragment: Fragment()  {
         binding.webView.webViewClient = WebViewClientEx(binding.progressBar)
         binding.webView.webChromeClient = WebChromeClientEx(binding.progressBar)
 
-
-
-
-//        setProgressBarVisibility(View.VISIBLE)
-//        webView.setWebViewClient(object : WebViewClient() {
-//            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
-//                super.onPageStarted(view, url, favicon)
-//                setProgressBarVisibility(View.VISIBLE)
-//            }
-//
-//            override fun onPageFinished(view: WebView, url: String) {
-//                super.onPageFinished(view, url)
-//                setProgressBarVisibility(View.GONE)
-//            }
-//
-//            override fun onReceivedError(
-//                view: WebView,
-//                request: WebResourceRequest,
-//                error: WebResourceError
-//            ) {
-//                super.onReceivedError(view, request, error)
-//                Toast.makeText(activity, "Cannot load page", Toast.LENGTH_SHORT).show()
-//                setProgressBarVisibility(View.GONE)
-//            }
-//        })
-
         if (savedInstanceState != null)
             binding.webView.restoreState(savedInstanceState)
         else {
-//            wv.setWebViewClient(MyBrowser())
-//            wv.getSettings().setLoadsImagesAutomatically(true)
-//            wv.getSettings().setJavaScriptEnabled(true)
-//            wv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY)
-//            wv.loadUrl(url)
-//            binding.progressBar.visibility = View.VISIBLE
             args.articleUrl?.let { binding.webView.loadUrl(it) }
-//            binding.progressBar.visibility = View.GONE
         }
-
-//        args.articleUrl?.let { binding.webView.loadUrl(it) }
-
-
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

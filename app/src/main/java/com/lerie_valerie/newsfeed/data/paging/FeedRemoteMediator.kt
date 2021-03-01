@@ -5,6 +5,10 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.lerie_valerie.newsfeed.Constant.Companion.C_ApiKey
+import com.lerie_valerie.newsfeed.Constant.Companion.C_From
+import com.lerie_valerie.newsfeed.Constant.Companion.C_Query
+import com.lerie_valerie.newsfeed.Constant.Companion.C_Sort
 import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
@@ -35,22 +39,12 @@ class FeedRemoteMediator @Inject constructor(
 
             if (page != null) {
                 val response = api.getNewsFeed(
-                    q = "android",
-//                    q = C_Query,
-                    from = "2019-04-00",
-//                    from = C_From,
-                    sortBy = "publi shedAt",
-//                    sortBy = C_Sort,
-//                    apiKey = "26eddb253e7840f988aec61f2ece2907",
-                    apiKey = "2bb5f673d126444da2ed6b70a0fc5b1d",
-//                    apiKey = C_ApiKey,
+                    q = C_Query,
+                    from = C_From,
+                    sortBy = C_Sort,
+                    apiKey = C_ApiKey,
                     page = page,
-//                    pageSize = when (loadType) {
-//                        LoadType.REFRESH -> state.config.initialLoadSize
-//                        else -> state.config.pageSize}
                     pageSize = state.config.pageSize
-
-
                 )
 
                 val isEndOfPaginationReached = response.articleResponseList.isEmpty()
@@ -124,7 +118,7 @@ class FeedRemoteMediator @Inject constructor(
         when (loadType) {
             LoadType.REFRESH -> {
 //                val keyModel = getKeyClosestToCurrentItem(state)
-//
+////
 //                println("${keyModel?.id} keyClosest")
 //
 //                val keyModel1 = getKeyLastItem(state)

@@ -15,6 +15,8 @@ interface ArticleDao {
 
 //    @Query("SELECT * FROM article ORDER BY id")
 //    fun getArticle(): PagingSource<Int, ArticleModel>
+//    @Query("SELECT * FROM article ORDER BY `key`, id")
+//    fun getArticle(): PagingSource<Int, ArticleModel>
     @Query("SELECT * FROM article ORDER BY `key`, id")
     fun getArticle(): PagingSource<Int, ArticleModel>
 

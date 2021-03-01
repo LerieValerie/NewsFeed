@@ -7,8 +7,7 @@ data class Article(
         val key: Int,
         val title: String?,
         val description: String?,
-        val date: String?,
-//        val date: Instant,
+        val date: Instant?,
         val urlToImage: String?,
         val imageName: String?,
         val url: String?

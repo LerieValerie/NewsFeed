@@ -75,5 +75,6 @@ class BitmapRepositoryImpl @Inject constructor(
     }
 
     private fun getPathDir() =
+//        context.cacheDir.absolutePath.toString() + File.separator + "Images"
         context.filesDir.absolutePath.toString() + File.separator + "Images"
 }

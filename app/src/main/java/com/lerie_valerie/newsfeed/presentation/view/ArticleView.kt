@@ -1,6 +1,7 @@
 package com.lerie_valerie.newsfeed.presentation.view
 
 import com.lerie_valerie.newsfeed.domain.entity.Article
+import com.lerie_valerie.newsfeed.presentation.formatter.DateTimeFormatter
 
 data class ArticleView (
     val id: Int,
@@ -8,7 +9,6 @@ data class ArticleView (
     val title: String?,
     val description: String?,
     val date: String?,
-    //        val date: Instant,
     val imageName: String?,
     val url: String?
 )
@@ -18,7 +18,7 @@ fun Article.toView() = ArticleView(
     key = key,
     title = title,
     description = description,
-    date = date,
+    date = DateTimeFormatter.getDateWithDot(date),
     imageName = imageName,
     url = url
 )

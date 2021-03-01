@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +20,11 @@ import coil.load
 import coil.request.ImageRequest
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import com.lerie_valerie.newsfeed.domain.entity.Article
+import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -45,6 +49,7 @@ class NewsFeedRosterFragment: Fragment() {
     ): View = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
         .apply { binding = this }.root
 
+    @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,6 +78,15 @@ class NewsFeedRosterFragment: Fragment() {
         lifecycleScope.launchWhenResumed {
             viewModel.loadArticle().collectLatest { pagingData ->
                 adapter.submitData(pagingData)
+            }
+        }
+
+        lifecycleScope.launch {
+            //Your adapter's loadStateFlow here
+            adapter.loadStateFlow.distinctUntilChangedBy {
+                it.refresh
+            }.collectLatest {
+                val list = adapter.snapshot()
             }
         }
 
@@ -137,7 +151,7 @@ class NewsFeedRosterFragment: Fragment() {
 //
 //    }
 
-    private fun display(article: Article) {
+    private fun display(article: ArticleView) {
         findNavController()
                 .navigate(
                         NewsFeedRosterFragmentDirections.actionDetail(
@@ -146,7 +160,7 @@ class NewsFeedRosterFragment: Fragment() {
                 )
     }
 
-    private fun imageShow(article: Article) : Bitmap? =
+    private fun imageShow(article: ArticleView) : Bitmap? =
         viewModel.getImageFromStorage(article.imageName)
 
 //    private fun setupViews() {

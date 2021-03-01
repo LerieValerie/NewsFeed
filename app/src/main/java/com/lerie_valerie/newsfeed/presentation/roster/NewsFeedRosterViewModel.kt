@@ -3,12 +3,15 @@ package com.lerie_valerie.newsfeed.presentation.roster
 import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
+import androidx.paging.map
 import coil.request.ImageRequest
 import com.lerie_valerie.newsfeed.domain.usecase.GetBitmapFromStorageUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
+import com.lerie_valerie.newsfeed.presentation.view.toView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +25,11 @@ class NewsFeedRosterViewModel @Inject constructor(
 
     fun loadArticle() =
 //        viewModelScope.launch {
-            loadArticleRemote().cachedIn(viewModelScope)
+            loadArticleRemote().map {
+                it.map {
+                        article -> article.toView()
+                }
+            }.cachedIn(viewModelScope)
 //        }
 
     fun loadArticleLiveData() =
