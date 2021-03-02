@@ -18,12 +18,14 @@ import coil.Coil
 import coil.ImageLoader
 import coil.load
 import coil.request.ImageRequest
+import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
@@ -76,19 +78,19 @@ class NewsFeedRosterFragment: Fragment() {
 
 
         lifecycleScope.launchWhenResumed {
-            viewModel.loadArticle().collectLatest { pagingData ->
+            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }
 
-        lifecycleScope.launch {
-            //Your adapter's loadStateFlow here
-            adapter.loadStateFlow.distinctUntilChangedBy {
-                it.refresh
-            }.collectLatest {
-                val list = adapter.snapshot()
-            }
-        }
+//        lifecycleScope.launch {
+//            //Your adapter's loadStateFlow here
+//            adapter.loadStateFlow.distinctUntilChangedBy {
+//                it.refresh
+//            }.collectLatest {
+//                val list = adapter.snapshot()
+//            }
+//        }
 
 
 //        viewModel.loadArticleLiveData().observe(viewLifecycleOwner) {
@@ -97,13 +99,13 @@ class NewsFeedRosterFragment: Fragment() {
 //        binding.article.scrollToPosition(5)
 //
 //        binding.article.adapter = adapter
-//        binding.article.adapter = adapter.withLoadStateFooter(
-//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }
-//        )
-        binding.article.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() },
+        binding.article.adapter = adapter.withLoadStateFooter(
             footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }
         )
+//        binding.article.adapter = adapter.withLoadStateHeaderAndFooter(
+//            header = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() },
+//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapter.retry() }
+//        )
 
 
 //        viewModel.loadArticle().asLiveData().observe(viewLifecycleOwner) { pagingData ->
@@ -163,32 +165,32 @@ class NewsFeedRosterFragment: Fragment() {
     private fun imageShow(article: ArticleView) : Bitmap? =
         viewModel.getImageFromStorage(article.imageName)
 
-//    private fun setupViews() {
-//        binding.article.adapter = redditAdapter
-//        binding.article.adapter = redditAdapter.withLoadStateHeaderAndFooter(
-//            header = NewsFeedLoadingAdapter { redditAdapter.retry() },
-//            footer = NewsFeedLoadingAdapter { redditAdapter.retry() }
-//        )
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.actions, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putString("qq", binding.article.text.trim().toString())
-//    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.load -> {
+                viewModel.deleteBitmapFromStorage()
+                viewModel.loadArticle()
 
-//    private fun getBitmapFromUrl(imageUrl: String, imageView: ImageView) = lifecycleScope.launch {
-////        progressbar.visible(true)
-//        imageView.load(imageUrl)
-//        val imageRequest = ImageRequest.Builder(requireContext())
-//            .data(imageUrl)
-//            .build()
-//        try {
-//            val downloadBitmap = (imageLoader.execute(imageRequest).drawable as BitmapDrawable).bitmap
-//            imageView.setImageBitmap(downloadBitmap)
-//            saveMediaToStorage(downloadedBitmap)
-//        } catch (e: Exception) {
-//            toast(e.message)
+                return true
+            }
+            R.id.delete -> {
+                viewModel.deleteBitmapFromStorage()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+//    private fun loadArticle(adapter: NewsFeedAdapter) {
+//        lifecycleScope.launch {
+//            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
+//                adapter.submitData(pagingData)
+//            }
 //        }
-////        progressbar.visible(false)
 //    }
 }

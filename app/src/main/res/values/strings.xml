@@ -6,4 +6,6 @@
     <string name="_05_02_2021">05.02.2021</string>
     <string name="content_description">News image</string>
     <string name="text_retry">Retry</string>
+    <string name="load">Load</string>
+    <string name="delete">Delete</string>
 </resources>

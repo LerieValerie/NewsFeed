@@ -1,10 +1,12 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import androidx.paging.map
 import coil.request.ImageRequest
+import com.lerie_valerie.newsfeed.domain.usecase.DeleteBitmapFolderUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetBitmapFromStorageUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
 import com.lerie_valerie.newsfeed.presentation.view.toView
@@ -20,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsFeedRosterViewModel @Inject constructor(
     private val loadArticleRemote: GetPagingArticleUseCase,
-    private val getBitmapFromStorage: GetBitmapFromStorageUseCase
+    private val getBitmapFromStorage: GetBitmapFromStorageUseCase,
+    private val deleteBitmapFolder: DeleteBitmapFolderUseCase
 ) : ViewModel() {
 
     fun loadArticle() =
@@ -35,7 +38,12 @@ class NewsFeedRosterViewModel @Inject constructor(
     fun loadArticleLiveData() =
         loadArticleRemote().cachedIn(viewModelScope).asLiveData()
 
-    fun getImageFromStorage(imageName: String?) = getBitmapFromStorage(imageName)
+    fun getImageFromStorage(imageName: String?) =
+        getBitmapFromStorage(imageName)
+
+
+    fun deleteBitmapFromStorage() =
+            deleteBitmapFolder()
 
 
 

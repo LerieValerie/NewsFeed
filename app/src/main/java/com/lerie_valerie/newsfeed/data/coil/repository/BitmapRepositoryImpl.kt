@@ -39,7 +39,7 @@ class BitmapRepositoryImpl @Inject constructor(
 //        }
 
 
-    override fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
+    override suspend fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
 
 //        val dirPath = context.filesDir.absolutePath.toString() + File.separator + "Images"
         val pathDir = getPathDir()
@@ -70,8 +70,15 @@ class BitmapRepositoryImpl @Inject constructor(
         val pathDir = getPathDir()
         val fileImage = File(pathDir)
         if (fileImage.exists()) {
-            fileImage.delete()
+//            fileImage.delete()
+            fileImage.deleteRecursively()
         }
+
+//        val a = context.cacheDir.absolutePath.toString() + File.separator + "image_cache"
+//        val file = File(a)
+//        if (file.exists()) {
+//            file.deleteRecursively()
+//        }
     }
 
     private fun getPathDir() =
