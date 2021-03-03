@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NewsFeed</string>
-    <string name="empty_text">Click the reload icon to add items</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="_05_02_2021">05.02.2021</string>

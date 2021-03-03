@@ -10,6 +10,7 @@ import com.lerie_valerie.newsfeed.domain.repository.ArticleFromRemoteToLocalRepo
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 

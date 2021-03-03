@@ -8,6 +8,7 @@ import coil.ImageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import coil.request.SuccessResult
 import com.lerie_valerie.newsfeed.data.coil.CoilRequest
 import com.lerie_valerie.newsfeed.data.coil.toCoil
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
@@ -25,6 +26,11 @@ class BitmapRepositoryImpl @Inject constructor(
 ) : BitmapRepository {
 
     private suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
+//    {
+//        val imageResult = imageLoader.execute(request)
+//        if (imageResult)
+//        )
+//    }
         (imageLoader.execute(request).drawable as BitmapDrawable).bitmap
 
     private fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {

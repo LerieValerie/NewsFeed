@@ -3,10 +3,15 @@ package com.lerie_valerie.newsfeed.presentation.roster
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.core.view.isVisible
+//import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.LoadState.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import java.lang.Error
 
 @AndroidEntryPoint
 class NewsFeedRosterFragment : Fragment() {
@@ -39,12 +47,18 @@ class NewsFeedRosterFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
-        .apply { binding = this }.root
+    ): View {
+        val view = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
+            .apply { binding = this }.root
+
+        return view
+    }
 
     @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         adapterNews =
             NewsFeedAdapter(
@@ -56,6 +70,30 @@ class NewsFeedRosterFragment : Fragment() {
         adapterNews.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
+        adapterNews.addLoadStateListener { loadState ->
+
+            binding.apply {
+//                if (loadState.refresh is Error) {
+//                    tvErrorMessage.text = loadState..localizedMessage
+//                }
+                val errorState =
+                    loadState.refresh as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+
+                errorState?.let {
+                    tvErrorMessage.text = "${it.error}"
+                }
+//                tvErrorMessage.text = errorState.toString()
+
+//                progressBar.isVisible = loadState.source.refresh is Loading
+                progressBar.isVisible = loadState.refresh is Loading
+//                progressBar.isVisible = loadState is loaLoading
+                tvErrorMessage.isVisible = loadState.refresh !is Loading
+                btnRetry.isVisible = loadState.refresh is Error
+            }
+        }
+
         binding.article.apply {
             adapter = adapterNews
             layoutManager = LinearLayoutManager(context)
@@ -66,13 +104,19 @@ class NewsFeedRosterFragment : Fragment() {
                     DividerItemDecoration.VERTICAL
                 )
             )
+
+
         }
 
-        lifecycleScope.launchWhenResumed {
+//        binding.progressBarMain.visibility = View.VISIBLE
+        lifecycleScope.launch {
             viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
+                println("asdasd $")
                 adapterNews.submitData(pagingData)
             }
+//            binding.progressBarMain.visibility = View.GONE
         }
+
 
 //        viewModel.loadArticleLiveData().observe(viewLifecycleOwner) {
 //            adapterNews.submitData(lifecycle, it)
@@ -103,8 +147,10 @@ class NewsFeedRosterFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.load -> {
+//                binding.progressBarMain.visibility = View.VISIBLE
                 viewModel.clearAll()
                 adapterNews.refresh()
+//                binding.progressBarMain.visibility = View.GONE
                 return true
             }
         }
