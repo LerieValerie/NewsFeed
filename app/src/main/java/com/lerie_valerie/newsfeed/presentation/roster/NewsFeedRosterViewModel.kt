@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import androidx.paging.map
 import coil.request.ImageRequest
+import com.lerie_valerie.newsfeed.domain.usecase.ClearDatabaseUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.DeleteBitmapFolderUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetBitmapFromStorageUseCase
 import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class NewsFeedRosterViewModel @Inject constructor(
     private val loadArticleRemote: GetPagingArticleUseCase,
     private val getBitmapFromStorage: GetBitmapFromStorageUseCase,
-    private val deleteBitmapFolder: DeleteBitmapFolderUseCase
+    private val deleteBitmapFolder: DeleteBitmapFolderUseCase,
+    private val clearDatabase: ClearDatabaseUseCase
 ) : ViewModel() {
 
     fun loadArticle() =
@@ -42,22 +44,12 @@ class NewsFeedRosterViewModel @Inject constructor(
         getBitmapFromStorage(imageName)
 
 
-    fun deleteBitmapFromStorage() =
-            deleteBitmapFolder()
+    fun clearAll() {
+        deleteBitmapFolder()
 
-
-
-
-//    fun refresh() {
-//        numbers = buildItems()
-//        state.set(STATE_NUMBERS, numbers)
-//    }
-
-
-//    fun loadSpecialityList() = loadSpecialityListById(workerId).map {
-//        it.map { speciality ->
-//            speciality.toView()
-//        }
-//    }.asLiveData()
+        viewModelScope.launch {
+            clearDatabase()
+        }
+    }
 }
 

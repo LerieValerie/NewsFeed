@@ -173,13 +173,13 @@ class NewsFeedRosterFragment: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.load -> {
-                viewModel.deleteBitmapFromStorage()
+                viewModel.clearAll()
                 viewModel.loadArticle()
 
                 return true
             }
             R.id.delete -> {
-                viewModel.deleteBitmapFromStorage()
+                viewModel.clearAll()
                 return true
             }
         }

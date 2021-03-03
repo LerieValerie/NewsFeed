@@ -6,10 +6,13 @@ import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.coil.CoilBuilder
 import com.lerie_valerie.newsfeed.data.coil.ImageLoader
 import com.lerie_valerie.newsfeed.data.coil.repository.*
+import com.lerie_valerie.newsfeed.data.local.repository.*
 import com.lerie_valerie.newsfeed.data.remote.retrofit.NetInterface
 import com.lerie_valerie.newsfeed.data.remote.retrofit.RetrofitBuilder
 import com.lerie_valerie.newsfeed.domain.repository.ArticleFromRemoteToLocalRepository
+import com.lerie_valerie.newsfeed.domain.repository.ArticleRepository
 import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
+import com.lerie_valerie.newsfeed.domain.repository.KeyRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -31,7 +34,7 @@ abstract class DataModule {
         @Singleton
         @Provides
         fun provideNetInterface(): NetInterface =
-                RetrofitBuilder.buildApi(RetrofitBuilder.BASE_API_URL)
+                RetrofitBuilder.buildApi()
 
         @Singleton
         @Provides
@@ -42,27 +45,12 @@ abstract class DataModule {
         @Provides
         fun provideCoilImageLoader(@ApplicationContext appContext: Context) =
             ImageLoader.build(appContext)
-
-//        @Singleton
-//        @Provides
-//        fun provideBitmapSaveRepository(@ApplicationContext appContext: Context) : BitmapSaveRepository =
-//            BitmapSaveRepositoryImpl(appContext)
     }
 
     @Binds
     abstract fun provideArticleFromRemoteToLocalRepository(
             repositoryImpl: ArticleFromRemoteToLocalRepositoryImpl
     ): ArticleFromRemoteToLocalRepository
-
-//    @Binds
-//    abstract fun provideBitmapDownloadRepository(
-//            repositoryImpl: BitmapDownloadRepositoryImpl
-//    ): BitmapDownloadRepository
-//
-//    @Binds
-//    abstract fun provideBitmapSaveRepository(
-//            repositoryImpl: BitmapSaveRepositoryImpl
-//    ): BitmapSaveRepository
 
     @Binds
     abstract fun provideApplicationContext(
@@ -73,4 +61,26 @@ abstract class DataModule {
     abstract fun provideBitmapRepository(
         repositoryImpl: BitmapRepositoryImpl
     ): BitmapRepository
+
+    @Binds
+    abstract fun provideArticleRepository(
+        repositoryImpl: ArticleRepositoryImpl
+    ): ArticleRepository
+
+    @Binds
+    abstract fun provideKeyRepository(
+        repositoryImpl: KeyRepositoryImpl
+    ): KeyRepository
+
+    @Binds
+    abstract fun provideArticlePagingRepository(
+        repositoryImpl: ArticlePagingRepositoryImpl
+    ): ArticlePagingRepository
+
+    @Binds
+    abstract fun provideKeyPagingRepository(
+        repositoryImpl: KeyPagingRepositoryImpl
+    ): KeyPagingRepository
+
+
 }

@@ -7,9 +7,9 @@ object RetrofitBuilder {
     const val BASE_API_URL =
         "https://newsapi.org"
 
-    fun buildApi(baseUrl: String): NetInterface {
+    fun buildApi(): NetInterface {
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
