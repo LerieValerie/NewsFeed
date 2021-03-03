@@ -1,17 +1,11 @@
 package com.lerie_valerie.newsfeed.domain.usecase
 
 import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetBitmapFromStorageUseCase @Inject constructor(
-    private val bitmapRepository: BitmapRepository,
-    private val dispatcher: CoroutineDispatcher
+    private val bitmapRepository: BitmapRepository
 ) {
     operator fun invoke(imageName: String?) =
-//        withContext(dispatcher) {
-            bitmapRepository.getBitmapFromStorage(imageName)
-//        }
-
+        bitmapRepository.getBitmapFromStorage(imageName)
 }

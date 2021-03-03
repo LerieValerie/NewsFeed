@@ -3,8 +3,6 @@ package com.lerie_valerie.newsfeed.data.remote.retrofit
 import com.google.gson.annotations.SerializedName
 
 data class FeedResponse(
-//    @SerializedName("status") val status: String?,
-//    @SerializedName("totalResults") val totalResult: Long?,
     @SerializedName("articles") val articleResponseList: List<ArticleResponse> = listOf()
 ) {
 //    fun toArticleList(key: Int) = articleResponseList.mapIndexed { i: Int, articleResponse: ArticleResponse ->

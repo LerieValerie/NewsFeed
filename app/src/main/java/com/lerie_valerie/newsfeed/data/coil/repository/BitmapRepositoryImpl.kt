@@ -8,6 +8,8 @@ import coil.ImageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import com.lerie_valerie.newsfeed.data.coil.CoilRequest
+import com.lerie_valerie.newsfeed.data.coil.toCoil
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
 import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 class BitmapRepositoryImpl @Inject constructor(
     private val imageLoader: ImageLoader,
-    private val context: Context
+    private val context: Context,
+    private val imageRequest: CoilRequest
 ) : BitmapRepository {
 
     override suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
@@ -54,6 +57,15 @@ class BitmapRepositoryImpl @Inject constructor(
             fileImage.deleteRecursively()
         }
     }
+
+    override suspend fun imageDownloadSave(articleList: List<Article>) =
+        articleList.map { it.toCoil() }.forEach { article ->
+            val request = article.urlToImage?.let { imageRequest.getImageRequest(it) }
+            val bitmap = request?.let { getBitmapDownload(request) }
+            bitmap?.let {
+                article.imageName?.let { imageName -> saveBitmapToStorage(it, imageName) }
+            }
+        }
 
     private fun getPathDir() =
 //        context.cacheDir.absolutePath.toString() + File.separator + "Images"
