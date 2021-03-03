@@ -24,10 +24,10 @@ class BitmapRepositoryImpl @Inject constructor(
     private val imageRequest: CoilRequest
 ) : BitmapRepository {
 
-    override suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
+    private suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
         (imageLoader.execute(request).drawable as BitmapDrawable).bitmap
 
-    override suspend fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
+    private fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
         val pathDir = getPathDir()
         val fileImage = File(pathDir)
         if(!fileImage.exists()) {
