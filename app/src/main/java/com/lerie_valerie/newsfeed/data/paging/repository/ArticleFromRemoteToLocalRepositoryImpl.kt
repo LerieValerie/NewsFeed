@@ -15,7 +15,6 @@ import javax.inject.Singleton
 
 @Singleton
 class ArticleFromRemoteToLocalRepositoryImpl @Inject constructor(
-        private val db: NewsFeedDatabase,
         private val remoteMediator: FeedRemoteMediator,
         private val getPagingArticle: GetArticlePagingSourceUseCase
 ) : ArticleFromRemoteToLocalRepository {
@@ -24,9 +23,9 @@ class ArticleFromRemoteToLocalRepositoryImpl @Inject constructor(
     override fun getArticle(): Flow<PagingData<Article>> {
 
         val pagingArticleModel = Pager(
-                PagingConfig(pageSize = 5, enablePlaceholders = true, prefetchDistance = 2),
+                PagingConfig(pageSize = 20, enablePlaceholders = true, prefetchDistance = 5),
                 remoteMediator = remoteMediator,
-                pagingSourceFactory = { db.articleDao().getArticle() }
+                pagingSourceFactory = { getPagingArticle() }
         ).flow
 
         return pagingArticleModel.map { it -> it.map { it.toEntity() } }

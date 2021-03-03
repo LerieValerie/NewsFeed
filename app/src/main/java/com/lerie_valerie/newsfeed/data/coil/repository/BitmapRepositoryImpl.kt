@@ -8,6 +8,8 @@ import coil.ImageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.ImageResult
+import com.lerie_valerie.newsfeed.data.local.converter.toModel
+import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
 import java.io.File
 import java.io.FileOutputStream
@@ -22,34 +24,13 @@ class BitmapRepositoryImpl @Inject constructor(
     override suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
         (imageLoader.execute(request).drawable as BitmapDrawable).bitmap
 
-//    override suspend fun getBitmapDownload(request: ImageRequest): Bitmap? {
-//        val image = imageLoader.execute(request)
-////        println(image)
-//        return (image.drawable as BitmapDrawable).bitmap
-//    }
-
-//        try {
-//            val image = imageLoader.execute(request)
-////                .drawable
-////                    as BitmapDrawable
-//                image.bitmap
-//        }
-//        catch (e: Throwable) {
-//            ErrorResult()
-//        }
-
-
     override suspend fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
-
-//        val dirPath = context.filesDir.absolutePath.toString() + File.separator + "Images"
         val pathDir = getPathDir()
         val fileImage = File(pathDir)
         if(!fileImage.exists()) {
             fileImage.mkdir();
-//            Log.i("IO", ""+folder.exists());
         }
 
-//        var fos: OutputStream? = null
         val image = File(pathDir, imageName)
         val fos = FileOutputStream(image)
         fos?.use {
@@ -70,18 +51,12 @@ class BitmapRepositoryImpl @Inject constructor(
         val pathDir = getPathDir()
         val fileImage = File(pathDir)
         if (fileImage.exists()) {
-//            fileImage.delete()
             fileImage.deleteRecursively()
         }
-
-//        val a = context.cacheDir.absolutePath.toString() + File.separator + "image_cache"
-//        val file = File(a)
-//        if (file.exists()) {
-//            file.deleteRecursively()
-//        }
     }
 
     private fun getPathDir() =
 //        context.cacheDir.absolutePath.toString() + File.separator + "Images"
         context.filesDir.absolutePath.toString() + File.separator + "Images"
+
 }

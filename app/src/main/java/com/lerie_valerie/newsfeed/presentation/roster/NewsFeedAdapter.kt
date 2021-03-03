@@ -39,19 +39,9 @@ private object DiffCallback : DiffUtil.ItemCallback<ArticleView>() {
 
     override fun areContentsTheSame(oldItem: ArticleView, newItem: ArticleView) =
         oldItem == newItem
-//            oldItem.title == newItem.title &&
-//                    oldItem.urlToImage == newItem.urlToImage
+
+//        oldItem.title == newItem.title &&
+//                oldItem.description == newItem.description &&
+//                oldItem.date == newItem.date &&
+//                oldItem.imageName == newItem.imageName
 }
-
-
-//class DiffUtilCallBack : DiffUtil.ItemCallback<RedditPost>() {
-//    override fun areItemsTheSame(oldItem: RedditPost, newItem: RedditPost): Boolean {
-//        return oldItem.key == newItem.key
-//    }
-//
-//    override fun areContentsTheSame(oldItem: RedditPost, newItem: RedditPost): Boolean {
-//        return oldItem.key == newItem.key
-//                && oldItem.score == newItem.score
-//                && oldItem.commentCount == newItem.commentCount
-//    }
-//}

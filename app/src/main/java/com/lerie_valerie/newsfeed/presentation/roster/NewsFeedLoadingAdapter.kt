@@ -27,31 +27,7 @@ class NewsFeedLoadingAdapter(
         parent: ViewGroup,
         loadState: LoadState
     ) = NewsFeedLoadingHolder (
-//        LoadingStateBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         LoadingStateBinding.inflate(inflater, parent, false),
         retry
     )
-
-//    override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) {
-//        holder.bindState(loadState)
-//    }
-//
-//    override fun onCreateViewHolder(
-//        parent: ViewGroup,
-//        loadState: LoadState
-//    ): LoadingStateViewHolder {
-//        val view = LayoutInflater.from(parent.context)
-//            .inflate(R.layout.item_loading_state, parent, false)
-//        return LoadingStateViewHolder(view, retry)
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-//        NewsFeedViewHolder (
-//            NewsItemBinding.inflate(inflater, parent, false),
-//            onRowClick
-//        )
-//
-//    override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {
-//        getItem(position)?.let { holder.bind(it) }
-//    }
 }

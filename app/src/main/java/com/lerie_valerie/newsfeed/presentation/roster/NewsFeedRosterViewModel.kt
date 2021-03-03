@@ -29,16 +29,18 @@ class NewsFeedRosterViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun loadArticle() =
-//        viewModelScope.launch {
             loadArticleRemote().map {
                 it.map {
                         article -> article.toView()
                 }
             }.cachedIn(viewModelScope)
-//        }
 
-    fun loadArticleLiveData() =
-        loadArticleRemote().cachedIn(viewModelScope).asLiveData()
+//    fun loadArticleLiveData() =
+//        loadArticleRemote().map {
+//            it.map {
+//                    article -> article.toView()
+//            }
+//        }.cachedIn(viewModelScope).asLiveData()
 
     fun getImageFromStorage(imageName: String?) =
         getBitmapFromStorage(imageName)

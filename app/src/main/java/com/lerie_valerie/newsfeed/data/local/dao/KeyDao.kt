@@ -14,9 +14,6 @@ interface KeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKey(key: KeyModel)
 
-//    @Query("SELECT * FROM remote_key WHERE id = :articleId")
-//    fun getKeyByArticleId(articleId: Int): KeyModel?
-
     @Query("SELECT * FROM remote_key ORDER BY id DESC")
     suspend fun getKeyList(): List<KeyModel>
 
