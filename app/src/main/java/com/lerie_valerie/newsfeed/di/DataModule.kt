@@ -9,11 +9,9 @@ import com.lerie_valerie.newsfeed.data.coil.repository.*
 import com.lerie_valerie.newsfeed.data.local.repository.*
 import com.lerie_valerie.newsfeed.data.remote.retrofit.NetInterface
 import com.lerie_valerie.newsfeed.data.remote.retrofit.RetrofitBuilder
-import com.lerie_valerie.newsfeed.domain.repository.ArticleFromRemoteToLocalRepository
-import com.lerie_valerie.newsfeed.domain.repository.ArticleRepository
-import com.lerie_valerie.newsfeed.domain.repository.BitmapRepository
-import com.lerie_valerie.newsfeed.domain.repository.KeyRepository
+import com.lerie_valerie.newsfeed.domain.repository.*
 import dagger.Binds
+import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,42 +43,59 @@ abstract class DataModule {
         @Provides
         fun provideCoilImageLoader(@ApplicationContext appContext: Context) =
             ImageLoader.build(appContext)
+
+//        @Singleton
+//        @Provides
+//        fun provideEventRepository() : EventRepository = EventRepositoryImpl()
     }
 
+    @Singleton
     @Binds
     abstract fun provideArticleFromRemoteToLocalRepository(
             repositoryImpl: ArticleFromRemoteToLocalRepositoryImpl
     ): ArticleFromRemoteToLocalRepository
 
+    @Singleton
     @Binds
     abstract fun provideApplicationContext(
         @ApplicationContext appContext: Context
     ): Context
 
+    @Singleton
     @Binds
     abstract fun provideBitmapRepository(
         repositoryImpl: BitmapRepositoryImpl
     ): BitmapRepository
 
+    @Singleton
     @Binds
     abstract fun provideArticleRepository(
         repositoryImpl: ArticleRepositoryImpl
     ): ArticleRepository
 
+    @Singleton
     @Binds
     abstract fun provideKeyRepository(
         repositoryImpl: KeyRepositoryImpl
     ): KeyRepository
 
+    @Singleton
     @Binds
     abstract fun provideArticlePagingRepository(
         repositoryImpl: ArticlePagingRepositoryImpl
     ): ArticlePagingRepository
 
+    @Singleton
     @Binds
     abstract fun provideKeyPagingRepository(
         repositoryImpl: KeyPagingRepositoryImpl
     ): KeyPagingRepository
+
+    @Singleton
+    @Binds
+    abstract fun provideEventRepository(
+        repositoryImpl: EventRepositoryImpl
+    ): EventRepository
 
 
 }

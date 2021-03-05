@@ -19,6 +19,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 
+@Suppress("UNNECESSARY_SAFE_CALL")
 class BitmapRepositoryImpl @Inject constructor(
     private val imageLoader: ImageLoader,
     private val context: Context,
@@ -26,12 +27,7 @@ class BitmapRepositoryImpl @Inject constructor(
 ) : BitmapRepository {
 
     private suspend fun getBitmapDownload(request: ImageRequest): Bitmap? =
-//    {
-//        val imageResult = imageLoader.execute(request)
-//        if (imageResult)
-//        )
-//    }
-        (imageLoader.execute(request).drawable as BitmapDrawable).bitmap
+         (imageLoader.execute(request)?.drawable)?.let { (it as  BitmapDrawable).bitmap }
 
     private fun saveBitmapToStorage(bitmap: Bitmap, imageName: String) {
         val pathDir = getPathDir()

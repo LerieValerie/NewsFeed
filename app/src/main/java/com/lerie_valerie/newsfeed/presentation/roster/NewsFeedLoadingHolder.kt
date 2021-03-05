@@ -1,18 +1,19 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
+import android.content.Context
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.LoadingStateBinding
-import com.lerie_valerie.newsfeed.databinding.NewsItemBinding
 
 class NewsFeedLoadingHolder(
     private val binding: LoadingStateBinding,
-    val retry: () -> Unit
+    private val retry: () -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -29,7 +30,51 @@ class NewsFeedLoadingHolder(
             progressBar.isVisible = loadState is LoadState.Loading
             tvErrorMessage.isVisible = loadState !is LoadState.Loading
             btnRetry.isVisible = loadState !is LoadState.Loading
+//            tvErrorMessage.isVisible = false
+//            btnRetry.isVisible = false
         }
     }
-
 }
+
+//        var errorText = if (loadState is LoadState.Error) loadState.error.localizedMessage else ""
+//
+//        val snackbarError = Snackbar.make(
+//            parentView,
+//            errorText,
+//            Snackbar.LENGTH_INDEFINITE
+//        )
+////        snackbarError.
+//
+////
+//        if (errorText.isNotEmpty()) {
+//            snackbarError.setAction(R.string.snackbar_retry) {
+//                snackbarError.dismiss()
+//                retry()
+//            }
+//                .show()
+//        }
+//        else {
+//            if (snackbarError.isShown) {
+//                snackbarError.dismiss()
+//            }
+//        }
+//
+//        val snackbarLoading = Snackbar.make(
+//            parentView,
+//            context.getString(R.string.snackBarLoading),
+//            Snackbar.LENGTH_INDEFINITE
+//        )
+//
+//        val bIsAppendLoading = loadState is LoadState.Loading
+//        if (bIsAppendLoading) {
+//            val snackbarLayout: Snackbar.SnackbarLayout = snackbarLoading.view as Snackbar.SnackbarLayout
+//            snackbarLayout.addView(ProgressBar(context))
+//
+//            snackbarLoading.show()
+//        } else {
+//            if (snackbarLoading.isShown) {
+//                snackbarLoading.dismiss()
+//            }
+//        }
+//    }
+//}

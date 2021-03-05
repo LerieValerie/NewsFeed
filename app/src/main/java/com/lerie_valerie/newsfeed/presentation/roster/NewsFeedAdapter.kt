@@ -14,16 +14,14 @@ import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 
 class NewsFeedAdapter(
         private val inflater: LayoutInflater,
-        private val onRowClick: (ArticleView) -> Unit,
-        private val imageShow: (ArticleView) -> Bitmap?
+        private val onRowClick: (ArticleView) -> Unit
 ) :
         PagingDataAdapter<ArticleView, NewsFeedViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             NewsFeedViewHolder (
             NewsItemBinding.inflate(inflater, parent, false),
-                    onRowClick,
-                imageShow
+                    onRowClick
     )
 
     override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {

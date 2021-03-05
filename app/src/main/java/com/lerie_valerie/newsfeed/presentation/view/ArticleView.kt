@@ -9,7 +9,7 @@ data class ArticleView (
     val title: String?,
     val description: String?,
     val date: String?,
-    val imageName: String?,
+    val urlToImage: String?,
     val url: String?
 )
 
@@ -19,6 +19,6 @@ fun Article.toView() = ArticleView(
     title = title,
     description = description,
     date = DateTimeFormatter.getDateWithDot(date),
-    imageName = imageName,
+    urlToImage = urlToImage,
     url = url
 )

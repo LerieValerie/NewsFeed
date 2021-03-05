@@ -1,20 +1,14 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import androidx.paging.map
-import coil.request.ImageRequest
-import com.lerie_valerie.newsfeed.domain.usecase.ClearDatabaseUseCase
-import com.lerie_valerie.newsfeed.domain.usecase.DeleteBitmapFolderUseCase
-import com.lerie_valerie.newsfeed.domain.usecase.GetBitmapFromStorageUseCase
-import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
+import com.lerie_valerie.newsfeed.domain.repository.EventRepository
+import com.lerie_valerie.newsfeed.domain.usecase.*
 import com.lerie_valerie.newsfeed.presentation.view.toView
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,9 +18,14 @@ import javax.inject.Inject
 class NewsFeedRosterViewModel @Inject constructor(
     private val loadArticleRemote: GetPagingArticleUseCase,
     private val getBitmapFromStorage: GetBitmapFromStorageUseCase,
-    private val deleteBitmapFolder: DeleteBitmapFolderUseCase,
-    private val clearDatabase: ClearDatabaseUseCase
+    private val clearDatabase: ClearDatabaseUseCase,
+//    private val sendDatabaseClear: SendDatabaseClearUseCase,
+    private val getEventFlow: GetEventFlowUseCase
 ) : ViewModel() {
+
+    val events: Flow<EventRepository.Event>
+    get() = getEventFlow()
+
 
     fun loadArticle() =
             loadArticleRemote().map {
@@ -47,7 +46,7 @@ class NewsFeedRosterViewModel @Inject constructor(
 
 
     fun clearAll() {
-        deleteBitmapFolder()
+//        deleteBitmapFolder()
 
         viewModelScope.launch {
             clearDatabase()
