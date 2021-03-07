@@ -33,12 +33,6 @@ class NewsFeedViewHolder(
                 error(R.drawable.ic_broken_image)
                 fallback(R.drawable.ic_no_image)
             }
-//            imageView.load("https://www.example.com/image.jpg") {
-//                crossfade(true)
-//                placeholder(R.drawable.image)
-//                transformations(CircleCropTransformation())
-//            }
-//            articleImage.setImageBitmap(imageShow(article))
         }
     }
 }

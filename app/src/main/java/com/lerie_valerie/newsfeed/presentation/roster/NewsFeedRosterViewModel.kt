@@ -19,7 +19,6 @@ class NewsFeedRosterViewModel @Inject constructor(
     private val loadArticleRemote: GetPagingArticleUseCase,
     private val getBitmapFromStorage: GetBitmapFromStorageUseCase,
     private val clearDatabase: ClearDatabaseUseCase,
-//    private val sendDatabaseClear: SendDatabaseClearUseCase,
     private val getEventFlow: GetEventFlowUseCase
 ) : ViewModel() {
 
@@ -46,8 +45,6 @@ class NewsFeedRosterViewModel @Inject constructor(
 
 
     fun clearAll() {
-//        deleteBitmapFolder()
-
         viewModelScope.launch {
             clearDatabase()
         }

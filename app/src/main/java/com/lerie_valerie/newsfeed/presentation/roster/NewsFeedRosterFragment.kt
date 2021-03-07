@@ -2,7 +2,6 @@ package com.lerie_valerie.newsfeed.presentation.roster
 
 //import androidx.core.view.isVisible
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -17,26 +16,23 @@ import androidx.paging.LoadState.Loading
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
-import coil.ImageLoader
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
+import com.lerie_valerie.newsfeed.domain.repository.EventRepository
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class NewsFeedRosterFragment : Fragment() {
     private val viewModel: NewsFeedRosterViewModel by viewModels()
-    private lateinit var imageLoader: ImageLoader
+
     private lateinit var adapterNews: NewsFeedAdapter
     private lateinit var adapterLoader: NewsFeedLoadingAdapter
-//    private lateinit var snackBarError: Snackbar
 
     private lateinit var binding: FragmentNewsFeedRosterBinding
 
@@ -44,95 +40,24 @@ class NewsFeedRosterFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        imageLoader = Coil.imageLoader(requireContext())
+        adapterInit()
+//        adapterLoaderInit()
+//        setAdapterLoader()
+//        setEventObservation()
+        setArticleObservation()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val view = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
+    ): View  = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
             .apply { binding = this }.root
 
-        return view
-    }
-
-//    @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//    viewModel..asLiveData().observe(viewLifecycleOwner)
 
-
-        adapterNews =
-            NewsFeedAdapter(
-                layoutInflater,
-                onRowClick = ::display
-//                imageShow = ::imageShow
-            )
-
-        adapterNews.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-    viewModel.events.asLiveData().observe(viewLifecycleOwner) {
-        println("eventRepository")
-        adapterLoader.notifyItemRemoved(0)
-        adapterNews.refresh()
-    }
-//
-//    adapterNews.addLoadStateListener { loadState ->
-//        binding.progressBar.isVisible = loadState.refresh is Loading
-//    }
-
-//    adapterNews.loadStateFlow
-//        adapterNews.addLoadStateListener { loadState ->
-//
-//            binding.apply {
-//
-//                val errorState =
-////                    loadState.source.append as? LoadState.Error
-////                    ?: loadState.source.prepend as? LoadState.Error
-//                    loadState.refresh as? LoadState.Error
-////                    ?: loadState.append as? LoadState.Error
-////                    ?: loadState.prepend as? LoadState.Error
-//
-//                errorState?.let {
-//                    tvErrorMessage.text = "${it.error.localizedMessage}"
-//                }
-////                    Toast.makeText(
-////                        this,
-////                        "\uD83D\uDE28 Wooops ${it.error}",
-////                        Toast.LENGTH_LONG
-////                    ).show()
-////                }
-////
-////                errorState?.let {
-////                    Toast.makeText(
-////                        this,
-////                        "\uD83D\uDE28 Wooops ${it.error}",
-////                        Toast.LENGTH_LONG
-////                    ).show()
-////                }
-////                tvErrorMessage.text = errorState.toString()
-//
-////                progressBar.isVisible = loadState.source.refresh is Loading
-//
-//                binding.article.isVisible = loadState.source.refresh !is Loading
-//                progressBar.isVisible = loadState.refresh is Loading
-////                progressBar.isVisible = loadState is loaLoading
-//                tvErrorMessage.isVisible = loadState.refresh !is Loading
-//                btnRetry.isVisible = loadState.refresh is Error
-//            }
-//        }
-
-
-//    snackBarError = Snackbar.make(
-//        binding.layoutMain,
-//        "",
-//        Snackbar.LENGTH_INDEFINITE
-//    )
-//    adapterStateInit()
 
         binding.article.apply {
             adapter = adapterNews
@@ -144,9 +69,16 @@ class NewsFeedRosterFragment : Fragment() {
                     DividerItemDecoration.VERTICAL
                 )
             )
-
-
         }
+
+//        adapterLoaderInit()
+        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
+        binding.article.adapter = adapterNews.withLoadStateFooter(
+            footer = adapterLoader
+//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
+        )
+
+        setEventObservation()
 
 //    val a = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
 //    a.da
@@ -154,19 +86,19 @@ class NewsFeedRosterFragment : Fragment() {
 //        footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
 //    )
 
-    adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-    binding.article.adapter = adapterNews.withLoadStateFooter(
-        footer = adapterLoader
-//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-    )
-    adapterStateInit()
+//        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
+//        binding.article.adapter = adapterNews.withLoadStateFooter(
+//            footer = adapterLoader
+////            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
+//        )
+        adapterStateInit()
+        setBottomSheetBehaviour()
 //        binding.progressBarMain.visibility = View.VISIBLE
-        lifecycleScope.launch {
-            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
-                adapterNews.submitData(pagingData)
-            }
-//            binding.progressBarMain.visibility = View.GONE
-        }
+//        lifecycleScope.launch {
+//            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
+//                adapterNews.submitData(pagingData)
+//            }
+//        }
 
 //    adapterLoader = NewsFeedLoadingAdapter(layoutInflater, requireContext()) { adapterNews.retry() }
 //    binding.article.adapter = adapterNews.withLoadStateFooter(
@@ -201,15 +133,52 @@ class NewsFeedRosterFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.load -> {
-//                binding.progressBar.visibility = View.VISIBLE
                 viewModel.clearAll()
-//                adapterLoader.notifyItemRemoved(0)
-//                adapterNews.refresh()
-//                binding.progressBarMain.visibility = View.GONE
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun adapterInit() {
+        adapterNews =
+            NewsFeedAdapter(
+                layoutInflater,
+                onRowClick = ::display
+            )
+
+        adapterNews.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
+    private fun adapterLoaderInit() {
+        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
+    }
+
+    private fun setAdapterLoader() {
+        adapterNews.withLoadStateFooter(
+            footer = adapterLoader
+        )
+    }
+
+    private fun setEventObservation() {
+        viewModel.events.asLiveData().observe(viewLifecycleOwner) {
+            when (it) {
+                is EventRepository.Event.ClearDatabase -> {
+                    println("eventRepository")
+                    adapterLoader.notifyItemRemoved(0)
+                    adapterNews.refresh()
+                }
+            }
+        }
+    }
+
+    private fun setArticleObservation() {
+        lifecycleScope.launchWhenResumed {
+            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
+                adapterNews.submitData(pagingData)
+            }
+        }
     }
 
     private fun adapterStateInit() {
@@ -222,7 +191,7 @@ class NewsFeedRosterFragment : Fragment() {
             binding.progressBar.isVisible = loadState.refresh is Loading
             // Show the retry state if initial load or refresh fails.
             binding.btnRetry.isVisible = loadState.refresh is Error
-            binding.btnRetry.setOnClickListener{adapterNews.retry()}
+//            binding.btnRetry.setOnClickListener { adapterNews.retry() }
 
             // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
             val errorState = loadState.source.append as? Error
@@ -295,6 +264,58 @@ class NewsFeedRosterFragment : Fragment() {
 //                    snackBarLoading.dismiss()
 //                }
 //            }
+        }
+    }
+
+    private fun setBottomSheetBehaviour() {
+//        val bottomSheetBehavior: BottomSheetBehavior<*> =
+//            BottomSheetBehavior.from<View>(llBottomSheet)
+
+// настройка состояний нижнего экрана
+
+// настройка состояний нижнего экрана
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+// настройка максимальной высоты
+
+// настройка максимальной высоты
+//        bottomSheetBehavior.peekHeight = 340
+
+// настройка возможности скрыть элемент при свайпе вниз
+
+// настройка возможности скрыть элемент при свайпе вниз
+//        bottomSheetBehavior.isHideable = false
+
+// настройка колбэков при изменениях
+
+// настройка колбэков при изменениях
+//        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
+//            override fun onStateChanged(bottomSheet: View, newState: Int) {}
+//            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+//        })
+
+
+
+//        val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
+
+        binding.bottomSheetLayout?.let {
+            // Get the BottomSheetBehavior from the fragment view
+            BottomSheetBehavior.from(it)?.let { bsb ->
+                // Set the initial state of the BottomSheetBehavior to HIDDEN
+                bsb.state = BottomSheetBehavior.STATE_HIDDEN
+
+                binding.btnRetry.setOnClickListener {
+                    bsb.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+
+                // Set the trigger that will expand your view
+//                fab_filter.setOnClickListener { bsb.state = BottomSheetBehavior.STATE_EXPANDED }
+
+                // Set the reference into class attribute (will be used latter)
+//                mBottomSheetBehavior = bsb
+            }
         }
     }
 }
