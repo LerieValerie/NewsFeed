@@ -7,11 +7,11 @@ import androidx.annotation.RequiresApi
 //import java.nio.file.Paths
 
 
-
+var messageCount = 0
 inline fun <reified T : Any?> T.logg(message: String = ""): T {
     val a: String = "!!" + makeLogTag()
     val b: String = "$this $message"
-    Log.i("!!" + makeLogTag(), "$this $message")
+    Log.i("${messageCount++}. !!" + makeLogTag(), "$this $message")
 //    Log.i(tag = "!!" + makeLogTag(), message = { "$this $message" })
     return this
 }

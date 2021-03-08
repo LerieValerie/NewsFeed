@@ -6,5 +6,26 @@
         android:id="@+id/load"
         android:icon="@drawable/ic_load"
         android:title="@string/load"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom|withText" >
+        <menu>
+            <item
+                android:id="@+id/editor_find"
+                android:icon="@drawable/ic_load"
+                android:title="string/search" />
+            <item
+                android:id="@+id/editor_encoding"
+                android:icon="@drawable/ic_load"
+                android:title="string/encoding" >
+
+                <menu>
+                    <item
+                        android:id="@+id/e2ditor_find"
+                        android:icon="@drawable/ic_load"
+                        android:title="string/search" />
+                </menu>
+            </item>
+        </menu>
+    </item>
+
+
 </menu>

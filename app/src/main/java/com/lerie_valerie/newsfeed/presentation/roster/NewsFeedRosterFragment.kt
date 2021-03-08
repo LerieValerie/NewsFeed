@@ -2,9 +2,10 @@ package com.lerie_valerie.newsfeed.presentation.roster
 
 //import androidx.core.view.isVisible
 
+//import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,14 +18,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import com.lerie_valerie.newsfeed.domain.repository.EventRepository
+import com.lerie_valerie.newsfeed.logg
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 
 @AndroidEntryPoint
@@ -36,6 +39,9 @@ class NewsFeedRosterFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsFeedRosterBinding
 
+    private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout?>? = null
+    private var bIsLoaderAdapterItemRemoved = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -45,20 +51,28 @@ class NewsFeedRosterFragment : Fragment() {
 //        setAdapterLoader()
 //        setEventObservation()
         setArticleObservation()
+//        adapterStateInit()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
-            .apply { binding = this }.root
+    ): View = FragmentNewsFeedRosterBinding.inflate(inflater, container, false)
+        .apply { binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
+//        println("onChanged Start ${bottomSheetBehavior?.state}")
+//        lifecycleScope.launch {
+//            logg("asd vcreated")
+//            adapterNews.loadStateFlow.onCompletion {
+//                logg("asd complete")
+//            }.asLiveData().observe(viewLifecycleOwner) {
+//                logg("asd collect")
+//            }
+//        }
         binding.article.apply {
             adapter = adapterNews
             layoutManager = LinearLayoutManager(context)
@@ -75,42 +89,16 @@ class NewsFeedRosterFragment : Fragment() {
         adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
         binding.article.adapter = adapterNews.withLoadStateFooter(
             footer = adapterLoader
-//            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
         )
 
         setEventObservation()
+//        setLoadStateFlow()
 
-//    val a = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-//    a.da
-//    binding.article.adapter = adapterNews.withLoadStateFooter(
-//        footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-//    )
-
-//        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-//        binding.article.adapter = adapterNews.withLoadStateFooter(
-//            footer = adapterLoader
-////            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-//        )
-        adapterStateInit()
         setBottomSheetBehaviour()
-//        binding.progressBarMain.visibility = View.VISIBLE
-//        lifecycleScope.launch {
-//            viewModel.loadArticle().distinctUntilChanged().collectLatest { pagingData ->
-//                adapterNews.submitData(pagingData)
-//            }
-//        }
+        adapterStateInit()
+//        test()
 
-//    adapterLoader = NewsFeedLoadingAdapter(layoutInflater, requireContext()) { adapterNews.retry() }
-//    binding.article.adapter = adapterNews.withLoadStateFooter(
-//        footer = adapterLoader
-////            footer = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-//    )
-
-//        viewModel.loadArticleLiveData().observe(viewLifecycleOwner) {
-//            adapterNews.submitData(lifecycle, it)
-//        }
-
-
+//        println("onChanged End ${bottomSheetBehavior?.state}")
     }
 
     private fun display(article: ArticleView) {
@@ -121,9 +109,6 @@ class NewsFeedRosterFragment : Fragment() {
                 )
             )
     }
-
-//    private fun imageShow(article: ArticleView): Bitmap? =
-//        viewModel.getImageFromStorage(article.imageName)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.actions, menu)
@@ -165,8 +150,8 @@ class NewsFeedRosterFragment : Fragment() {
         viewModel.events.asLiveData().observe(viewLifecycleOwner) {
             when (it) {
                 is EventRepository.Event.ClearDatabase -> {
-                    println("eventRepository")
-                    adapterLoader.notifyItemRemoved(0)
+//                    adapterLoader.notifyItemRemoved(0)
+//                    bIsLoaderAdapterItemRemoved = true
                     adapterNews.refresh()
                 }
             }
@@ -181,141 +166,134 @@ class NewsFeedRosterFragment : Fragment() {
         }
     }
 
+//    private val fff = MutableStateFlow<CombinedLoadStates?>(null)
+
+//        private fun setLoadStateFlow() {
+//        lifecycleScope.launch {
+//            adapterNews.loadStateFlow
+//                .distinctUntilChangedBy { it.refresh }
+//                .filter { it.refresh is LoadState.NotLoading }
+//                .collect {
+//                    binding.article.scrollToPosition(0)
+////                    if (bIsLoaderAdapterItemRemoved) {
+////                        adapterLoader.notifyItemInserted(0)
+////                    }
+//                }
+//        }
+//    }
+
+    private fun test() {
+//        adapterNews.addLoadStateListener { loadState ->
+//            binding.progressBar.isVisible = loadState.refresh is Loading
+//        }
+    }
+
     private fun adapterStateInit() {
-        adapterNews.addLoadStateListener { loadState ->
-            binding.progressBar.isVisible = loadState.refresh is Loading
 
-            // Only show the list if refresh succeeds.
-//            binding.article.isVisible = loadState.source.refresh is LoadState.NotLoading
-            // Show loading spinner during initial load or refresh.
-            binding.progressBar.isVisible = loadState.refresh is Loading
-            // Show the retry state if initial load or refresh fails.
-            binding.btnRetry.isVisible = loadState.refresh is Error
-//            binding.btnRetry.setOnClickListener { adapterNews.retry() }
 
-            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
-            val errorState = loadState.source.append as? Error
-                ?: loadState.source.prepend as? Error
-                ?: loadState.append as? Error
-                ?: loadState.prepend as? Error
-            errorState?.let {
-                Toast.makeText(
-                    requireContext(),
-                    "\uD83D\uDE28 Wooops ${it.error}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+//        lifecycleScope.launchWhenResumed {
+//            adapterNews.addLoadStateListener { loadState ->
+//
+//                println("sfa ${loadState.mediator?.refresh}")
+////                if (loadState.refresh is Loading) {
+////                    println("sfa")
+////                }
+////                binding.progressBar.isVisible = loadState.refresh is Loading
+//            }
+            adapterNews.loadStateFlow.debounce(100).asLiveData().observe(viewLifecycleOwner) { loadState ->
+                binding.progressBar.isVisible = loadState.refresh is Loading
 
-//            val errorState =
-//                loadState.refresh as? Error
-//                    ?: loadState.append as? Error
-//                    ?: loadState.prepend as? Error
-//
-//            val errorText = errorState?.let { "${it.error.localizedMessage}" }
-//
-////            val snackBarError = Snackbar.make(
-////                binding.layoutMain,
-////                "",
-////                Snackbar.LENGTH_LONG
-////            )
-//println("SNACK errorTextBefore ${errorText}")
-//
-//            if (errorText != null) {
-//                val snackBarError = Snackbar.make(
-//                    binding.layoutMain,
-//                    errorText,
-//                    10000
-//                )
-//    println("SNACK errorText ${errorText}")
-//    snackBarError.setText(errorText)
-////                snackBarError.duration = 5
-//                snackBarError.setAction(R.string.snackbar_retry) {
-//                    println("SNACK action")
-//                    snackBarError.dismiss()
-//                    println("SNACK show ${snackBarError.isShown}")
-//                    adapterNews.retry()
-//                    println("SNACK after action")
+                val errorState =
+//                loadState.source.append as? Error
+//                ?: loadState.source.prepend as? Error
+//                ?:
+                    loadState.append as? Error
+                        ?: loadState.prepend as? Error
+                        ?: loadState.refresh as? Error
+
+//                if (errorState == null) {
+//                    return@collect
+//                }
+//                return@collect
+//                println("onChanged0 ${bottomSheetBehavior?.state}")
+//                println("onChanged ${errorState?.error}")
+//                if (errorState != null) {
+//                    binding.errorText.text = "${errorState.error}"
+//                }
+//                delay(100)
+//                yield()
+                if (errorState != null) {
+                    println("onChanged1 ${bottomSheetBehavior?.state}")
+                    binding.errorText.text = "${errorState.error}"
+//                    if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 //                    }
-//                    .show()
-//                println("SNACK after show")
-//            }
-//            else {
-//                println("SNACK errorText2 ${errorText} ${snackBarError.isShown}")
-//                if (snackBarError.isShown) {
-//                    snackBarError.dismiss()
-//                }
-//            }
 
-//            val snackBarLoading = Snackbar.make(
-//                binding.layoutMain,
-//                getString(R.string.snackBarLoading),
-//                Snackbar.LENGTH_INDEFINITE
-//            )
-//
-//            val bIsAppendLoading = loadState.mediator?.append is Loading
-//            if (bIsAppendLoading) {
-//                val snackBarLayout:SnackbarLayout = snackBarLoading.view as SnackbarLayout
-//                snackBarLayout.addView(ProgressBar(requireContext()))
-//
-//                snackBarLoading.show()
-//            }
-//            else {
-//                if (snackBarLoading.isShown) {
-//                    snackBarLoading.dismiss()
-//                }
-//            }
-        }
+                    binding.btnRetry.setOnClickListener {
+                        adapterNews.retry()
+//                        println("onChanged5 ${bottomSheetBehavior?.state}")
+//                        if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
+                        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+//                        }
+                    }
+                } else {
+//                    println("onChanged2 ${bottomSheetBehavior?.state}")
+
+//                    if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_HIDDEN) {
+                    bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+//                    }
+//                    println("onChanged3 ${bottomSheetBehavior?.state}")
+                }
+//                println("onChanged4 ${bottomSheetBehavior?.state}")
+            }
+//        }
     }
 
     private fun setBottomSheetBehaviour() {
-//        val bottomSheetBehavior: BottomSheetBehavior<*> =
-//            BottomSheetBehavior.from<View>(llBottomSheet)
-
-// настройка состояний нижнего экрана
-
-// настройка состояний нижнего экрана
-//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-//        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-// настройка максимальной высоты
-
-// настройка максимальной высоты
-//        bottomSheetBehavior.peekHeight = 340
-
-// настройка возможности скрыть элемент при свайпе вниз
-
-// настройка возможности скрыть элемент при свайпе вниз
-//        bottomSheetBehavior.isHideable = false
-
-// настройка колбэков при изменениях
-
-// настройка колбэков при изменениях
-//        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
-//            override fun onStateChanged(bottomSheet: View, newState: Int) {}
-//            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-//        })
-
-
-
-//        val fragment = supportFragmentManager.findFragmentById(R.id.filter_fragment)
 
         binding.bottomSheetLayout?.let {
-            // Get the BottomSheetBehavior from the fragment view
             BottomSheetBehavior.from(it)?.let { bsb ->
-                // Set the initial state of the BottomSheetBehavior to HIDDEN
                 bsb.state = BottomSheetBehavior.STATE_HIDDEN
-
-                binding.btnRetry.setOnClickListener {
-                    bsb.state = BottomSheetBehavior.STATE_EXPANDED
+                bsb.saveFlags = BottomSheetBehavior.SAVE_ALL
+//                bsb.saveFlags = BottomSheetBehavior.SAVE_PEEK_HEIGHT
+//                bsb.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+//                bsb.saveFlags = BottomSheetBehavior.SAVE_HIDEABLE
+//                bsb.saveFlags = BottomSheetBehavior.SAVE_SKIP_COLLAPSED
+                binding.btnRetry2.setOnClickListener {
+                    lifecycleScope.launch {
+                        delay(1000)
+                        println("onChanged Start ${bsb?.state}")
+                        bsb.state = BottomSheetBehavior.STATE_EXPANDED
+//                    if (bsb.state == BottomSheetBehavior.STATE_HIDDEN) {
+//                        println("onChanged if ${bsb?.state}")
+//                        bsb.state = BottomSheetBehavior.STATE_EXPANDED
+//                        bsb.state = BottomSheetBehavior.STATE_EXPANDED
+//                    }
+//                    else {
+//                        println("onChanged else ${bsb?.state}")
+//                        bsb.state = BottomSheetBehavior.STATE_HIDDEN
+//                    }
+                        println("onChanged End ${bsb?.state}")
+                    }
                 }
 
-                // Set the trigger that will expand your view
-//                fab_filter.setOnClickListener { bsb.state = BottomSheetBehavior.STATE_EXPANDED }
 
-                // Set the reference into class attribute (will be used latter)
-//                mBottomSheetBehavior = bsb
+                bottomSheetBehavior = bsb
             }
         }
     }
+
+//    private fun setLoadStateFlow() {
+//        lifecycleScope.launch {
+//            adapterNews.loadStateFlow
+//                .distinctUntilChangedBy { it.refresh }
+//                .filter { it.refresh is LoadState.NotLoading }
+//                .collect {
+//                    binding.article.scrollToPosition(0)
+////                    if (bIsLoaderAdapterItemRemoved) {
+////                        adapterLoader.notifyItemInserted(0)
+////                    }
+//                }
+//        }
+//    }
 }
