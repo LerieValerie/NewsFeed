@@ -13,7 +13,6 @@ class EventRepositoryImpl @Inject constructor() : EventRepository {
         get() = eventChannel
 
     override suspend fun sendEvent(e: EventRepository.Event) {
-        println("eventFlow")
         eventChannel.emit(e)
     }
 }

@@ -22,13 +22,4 @@ class DomainModule {
         fun provideCoroutineDispatcher() =
             Dispatchers.Default
     }
-
-//    @DefaultDispatcher
-//    @Provides
-//    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-
 }
-
-//@Qualifier
-//@Retention(AnnotationRetention.BINARY)
-//annotation class DefaultDispatcher

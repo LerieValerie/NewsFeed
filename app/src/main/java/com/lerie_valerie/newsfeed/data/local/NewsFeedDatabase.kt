@@ -9,8 +9,6 @@ import com.lerie_valerie.newsfeed.data.local.dao.KeyDao
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
 
-private const val DB_NAME = "news_feed.db"
-
 @Database(
         entities = [
             ArticleModel::class,
@@ -25,6 +23,8 @@ abstract class NewsFeedDatabase : RoomDatabase() {
     abstract fun keyDao(): KeyDao
 
     companion object {
+        private const val DB_NAME = "news_feed.db"
+
         fun newInstance(context: Context) =
                 Room.databaseBuilder(context, NewsFeedDatabase::class.java, DB_NAME).build()
     }

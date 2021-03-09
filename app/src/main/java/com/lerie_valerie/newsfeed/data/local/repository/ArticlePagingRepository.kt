@@ -9,5 +9,4 @@ import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 interface ArticlePagingRepository {
     suspend fun insertArticleList(articleList: List<ArticleModel>)
     fun getArticle(): PagingSource<Int, ArticleModel>
-    suspend fun getArticleByKey(key: Int): List<ArticleModel>
 }

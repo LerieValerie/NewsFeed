@@ -6,15 +6,9 @@ import com.lerie_valerie.newsfeed.domain.repository.KeyRepository
 import javax.inject.Inject
 
 class KeyPagingRepositoryImpl @Inject constructor(private val dbInstance: NewsFeedDatabase) : KeyPagingRepository {
-    override suspend fun insertKeyList(keyList: List<KeyModel>) =
-        dbInstance.keyDao().insertKeyList(keyList)
-
     override suspend fun insertKey(key: KeyModel) =
         dbInstance.keyDao().insertKey(key)
 
     override suspend fun getKeyList(): List<KeyModel> =
         dbInstance.keyDao().getKeyList()
-
-    override suspend fun getKeyById(id: Int): KeyModel? =
-        dbInstance.keyDao().getKeyById(id)
 }

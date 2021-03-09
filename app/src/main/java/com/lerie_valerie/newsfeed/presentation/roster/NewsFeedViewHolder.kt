@@ -20,13 +20,11 @@ class NewsFeedViewHolder(
     }
 
     fun bind(article: ArticleView) {
-        println("${article.id} ${article.key} article")
         this.article = article
         binding.apply {
             articleTitle.text = article.title
             articleDate.text = article.date
             articleDescription.text = article.description
-            articleKey.text = "${article.id} ${article.key}"
 
             articleImage.load(article.urlToImage) {
                 placeholder(R.drawable.ic_image_place_holder)

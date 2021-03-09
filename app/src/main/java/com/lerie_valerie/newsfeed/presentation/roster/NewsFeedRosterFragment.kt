@@ -66,14 +66,7 @@ class NewsFeedRosterFragment : Fragment() {
             )
         }
 
-//        adapterLoaderInit()
-
-
-        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-        binding.article.adapter = adapterNews.withLoadStateFooter(
-            footer = adapterLoader
-        )
-
+        adapterLoaderInit()
         setEventObservation()
         setBottomSheetBehaviour()
         setBtnRetryListener()
@@ -117,11 +110,8 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun adapterLoaderInit() {
-        adapterLoader = NewsFeedLoadingAdapter(layoutInflater) { adapterNews.retry() }
-    }
-
-    private fun setAdapterLoader() {
-        adapterNews.withLoadStateFooter(
+        adapterLoader = NewsFeedLoadingAdapter(layoutInflater)
+        binding.article.adapter = adapterNews.withLoadStateFooter(
             footer = adapterLoader
         )
     }
@@ -166,7 +156,6 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun setBottomSheetBehaviour() {
-
         binding.bottomSheetLayout.let {
             BottomSheetBehavior.from(it).let { bsb ->
                 bsb.state = BottomSheetBehavior.STATE_HIDDEN

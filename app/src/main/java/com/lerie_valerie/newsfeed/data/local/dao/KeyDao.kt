@@ -9,9 +9,6 @@ import com.lerie_valerie.newsfeed.data.local.model.KeyModel
 @Dao
 interface KeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertKeyList(keyList: List<KeyModel>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKey(key: KeyModel)
 
     @Query("SELECT * FROM remote_key ORDER BY id DESC")

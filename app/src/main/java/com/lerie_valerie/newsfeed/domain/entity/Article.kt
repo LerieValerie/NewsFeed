@@ -9,6 +9,5 @@ data class Article(
         val description: String?,
         val date: Instant?,
         val urlToImage: String?,
-        val imageName: String?,
         val url: String?
 )

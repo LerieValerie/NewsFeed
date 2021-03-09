@@ -11,7 +11,4 @@ class ArticlePagingRepositoryImpl @Inject constructor(private val dbInstance: Ne
 
     override fun getArticle(): PagingSource<Int, ArticleModel> =
         dbInstance.articleDao().getArticle()
-
-    override suspend fun getArticleByKey(key: Int): List<ArticleModel> =
-        dbInstance.articleDao().getArticleByKey(key)
 }

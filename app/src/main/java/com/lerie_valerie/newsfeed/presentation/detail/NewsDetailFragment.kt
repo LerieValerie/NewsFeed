@@ -1,5 +1,6 @@
 package com.lerie_valerie.newsfeed.presentation.detail
 
+import android.net.http.SslError
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.webkit.*
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.room.PrimaryKey
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsDetailBinding
 
 
@@ -23,13 +25,11 @@ class NewsDetailFragment: Fragment()  {
             .apply { binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.webView.webViewClient = WebViewClientEx(binding.progressBar)
-        binding.webView.webChromeClient = WebChromeClientEx(binding.progressBar)
+        binding.apply {
+            webView.webViewClient = ProgressWebViewClient(progressBar)
+            webView.webChromeClient = ProgressWebChromeClient(progressBar)
 
-        if (savedInstanceState != null)
-            binding.webView.restoreState(savedInstanceState)
-        else {
-            args.articleUrl?.let { binding.webView.loadUrl(it) }
+            webViewInit(webView, savedInstanceState)
         }
     }
 
@@ -38,14 +38,24 @@ class NewsDetailFragment: Fragment()  {
         binding.webView.saveState(outState)
     }
 
-    class WebChromeClientEx(private val progressBar: ProgressBar) : WebChromeClient() {
+    private fun webViewInit(webView: WebView, savedInstanceState: Bundle?) {
+        webView.apply {
+            if (savedInstanceState != null)
+                restoreState(savedInstanceState)
+            else {
+                args.articleUrl?.let { loadUrl(it) }
+            }
+        }
+    }
+
+    class ProgressWebChromeClient(private val progressBar: ProgressBar) : WebChromeClient() {
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             progressBar.visibility = View.VISIBLE
             progressBar.progress = newProgress
         }
     }
 
-    class WebViewClientEx(private val progressBar: ProgressBar) : WebViewClient() {
+    class ProgressWebViewClient(private val progressBar: ProgressBar) : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             view.loadUrl(url)
             return true

@@ -12,14 +12,8 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticleList(articleList: List<ArticleModel>)
 
-//    @Query("SELECT * FROM article ORDER BY id")
-//    fun getArticle(): PagingSource<Int, ArticleModel>
-
     @Query("SELECT * FROM article ORDER BY `key`, id")
     fun getArticle(): PagingSource<Int, ArticleModel>
-
-    @Query("SELECT * FROM article WHERE `key` = :key ORDER BY id")
-    suspend fun getArticleByKey(key: Int): List<ArticleModel>
 
     @Query("DELETE FROM article")
     suspend fun deleteAllArticle()

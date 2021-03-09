@@ -35,16 +35,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/btnRetry2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="6dp"-->
-<!--        android:text="@string/text_retry"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -53,7 +43,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_sheet_corner"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="@dimen/margin"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,16 +58,15 @@
             android:layout_weight="1"
             android:maxLines="3"
             android:minLines="1"
-            android:textSize="18sp"
-            tools:text="asd" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btn_retry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
             android:text="@string/retry"
             tools:text="@string/retry" />
     </LinearLayout>

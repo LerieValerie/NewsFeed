@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
     sealed class Event {
-        class ClearDatabase(): Event()
+        object ClearDatabase : Event()
     }
 
     val eventFlow: Flow<Event>

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//private const val C_State_Article = "article"
 
 @HiltViewModel
 class NewsFeedRosterViewModel @Inject constructor(
@@ -31,15 +30,6 @@ class NewsFeedRosterViewModel @Inject constructor(
                         article -> article.toView()
                 }
             }.cachedIn(viewModelScope)
-
-//    fun loadArticleLiveData() =
-//        loadArticleRemote().map {
-//            it.map {
-//                    article -> article.toView()
-//            }
-//        }.cachedIn(viewModelScope).asLiveData()
-
-
 
     fun clearAll() {
         viewModelScope.launch {

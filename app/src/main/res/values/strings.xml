@@ -2,12 +2,9 @@
     <string name="app_name">NewsFeed</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="_05_02_2021">05.02.2021</string>
+    <string name="date">05.02.2021</string>
     <string name="content_description">News image</string>
-    <string name="text_retry">Retry</string>
     <string name="load">Reload</string>
-    <string name="snackbar_retry">Retry</string>
-    <string name="snackBarLoading">Loading</string>
     <string name="retry">Retry</string>
     <string name="developer_options">Developer options</string>
 </resources>

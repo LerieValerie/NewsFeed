@@ -7,5 +7,5 @@ import javax.inject.Inject
 class SendDatabaseClearUseCase @Inject constructor(private val eventRepository: EventRepository) {
 
     suspend operator fun invoke() =
-        eventRepository.sendEvent(EventRepository.Event.ClearDatabase())
+        eventRepository.sendEvent(EventRepository.Event.ClearDatabase)
 }

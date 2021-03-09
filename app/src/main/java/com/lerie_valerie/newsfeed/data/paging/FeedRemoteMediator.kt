@@ -4,6 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import com.lerie_valerie.newsfeed.Constant.Companion.C_ApiKey
 import com.lerie_valerie.newsfeed.Constant.Companion.C_From
 import com.lerie_valerie.newsfeed.Constant.Companion.C_Query
 import com.lerie_valerie.newsfeed.Constant.Companion.C_Sort
@@ -17,21 +18,22 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-const val C_Default_Page = 1
-
 @OptIn(ExperimentalPagingApi::class)
 class FeedRemoteMediator @Inject constructor(
     private val api: NetInterface,
     private val keyPagingRepository: KeyPagingRepository,
     private val articlePagingRepository: ArticlePagingRepository
 ) : RemoteMediator<Int, ArticleModel>() {
+
+    companion object {
+        private const val C_Default_Page = 1
+    }
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, ArticleModel>
     ): MediatorResult {
-
         return try {
-
             val page = getKeyPage(loadType, state)
 
             if (page != null) {
@@ -39,12 +41,7 @@ class FeedRemoteMediator @Inject constructor(
                     q = C_Query,
                     from = C_From,
                     sortBy = C_Sort,
-//                    apiKey = "26eddb253e7840f988aec61f2ece2907",
-//                    apiKey = "631dff9582c04fb5b7f234174ad7dbd8",
-                    apiKey = "2bb5f673d126444da2ed6b70a0fc5b1d",
-                    //        const val C_ApiKey = "2bb5f673d126444da2ed6b70a0fc5b1d"
-
-//                    apiKey = C_ApiKey,
+                    apiKey = C_ApiKey,
                     page = page,
                     pageSize = state.config.pageSize
                 )
@@ -74,7 +71,6 @@ class FeedRemoteMediator @Inject constructor(
 
     private suspend fun getKey() =
         keyPagingRepository.getKeyList().firstOrNull()
-
 
     private suspend fun getKeyPage(loadType: LoadType, state: PagingState<Int, ArticleModel>) =
         when (loadType) {
