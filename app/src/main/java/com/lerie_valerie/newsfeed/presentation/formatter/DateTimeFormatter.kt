@@ -1,16 +1,17 @@
 package com.lerie_valerie.newsfeed.presentation.formatter
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import java.time.ZoneId
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class DateTimeFormatter {
     companion object {
         fun getDateWithDot(dateInstant: Instant?): String? {
             val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-            return dateInstant?.toLocalDateTime(TimeZone.currentSystemDefault())?.toJavaLocalDateTime()
+            return dateInstant?.toLocalDateTime(TimeZone.currentSystemDefault())
+                ?.toJavaLocalDateTime()
                 ?.format(formatter)
         }
     }

@@ -1,21 +1,19 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
-import android.graphics.Bitmap
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.NewsItemBinding
-import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 
 class NewsFeedViewHolder(
-        private val binding: NewsItemBinding,
-        private val onRowClick: (ArticleView) -> Unit
+    private val binding: NewsItemBinding,
+    private val onRowClick: (ArticleView) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var article: ArticleView
 
-        init {
+    init {
         binding.root.setOnClickListener { onRowClick(article) }
     }
 

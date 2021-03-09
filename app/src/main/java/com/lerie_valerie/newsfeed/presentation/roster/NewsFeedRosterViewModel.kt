@@ -1,14 +1,17 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.lerie_valerie.newsfeed.domain.repository.EventRepository
-import com.lerie_valerie.newsfeed.domain.usecase.*
+import com.lerie_valerie.newsfeed.domain.usecase.ClearDatabaseUseCase
+import com.lerie_valerie.newsfeed.domain.usecase.GetEventFlowUseCase
+import com.lerie_valerie.newsfeed.domain.usecase.GetPagingArticleUseCase
 import com.lerie_valerie.newsfeed.presentation.view.toView
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,15 +24,15 @@ class NewsFeedRosterViewModel @Inject constructor(
 ) : ViewModel() {
 
     val events: Flow<EventRepository.Event>
-    get() = getEventFlow()
+        get() = getEventFlow()
 
 
     fun loadArticle() =
-            loadArticleRemote().map {
-                it.map {
-                        article -> article.toView()
-                }
-            }.cachedIn(viewModelScope)
+        loadArticleRemote().map {
+            it.map { article ->
+                article.toView()
+            }
+        }.cachedIn(viewModelScope)
 
     fun clearAll() {
         viewModelScope.launch {

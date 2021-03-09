@@ -2,7 +2,6 @@ package com.lerie_valerie.newsfeed.data.local.repository
 
 import com.lerie_valerie.newsfeed.domain.repository.EventRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class EventRepositoryImpl @Inject constructor() : EventRepository {

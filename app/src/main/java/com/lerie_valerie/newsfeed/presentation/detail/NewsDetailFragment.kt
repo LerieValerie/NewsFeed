@@ -1,19 +1,19 @@
 package com.lerie_valerie.newsfeed.presentation.detail
 
-import android.net.http.SslError
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.room.PrimaryKey
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsDetailBinding
 
 
-class NewsDetailFragment: Fragment()  {
+class NewsDetailFragment : Fragment() {
     private val args: NewsDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentNewsDetailBinding
 
@@ -22,7 +22,7 @@ class NewsDetailFragment: Fragment()  {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentNewsDetailBinding.inflate(inflater, container, false)
-            .apply { binding = this }.root
+        .apply { binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.apply {

@@ -1,7 +1,7 @@
 package com.lerie_valerie.newsfeed.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -30,5 +30,5 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() =
-            NavigationUI.navigateUp(findNavController(R.id.nav_host), appBarConfiguration)
+        NavigationUI.navigateUp(findNavController(R.id.nav_host), appBarConfiguration)
 }

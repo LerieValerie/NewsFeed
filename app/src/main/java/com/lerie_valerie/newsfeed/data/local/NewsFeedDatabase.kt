@@ -10,12 +10,12 @@ import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
 
 @Database(
-        entities = [
-            ArticleModel::class,
-            KeyModel::class
-        ],
-        version = 1,
-        exportSchema = false
+    entities = [
+        ArticleModel::class,
+        KeyModel::class
+    ],
+    version = 1,
+    exportSchema = false
 )
 
 abstract class NewsFeedDatabase : RoomDatabase() {
@@ -26,6 +26,6 @@ abstract class NewsFeedDatabase : RoomDatabase() {
         private const val DB_NAME = "news_feed.db"
 
         fun newInstance(context: Context) =
-                Room.databaseBuilder(context, NewsFeedDatabase::class.java, DB_NAME).build()
+            Room.databaseBuilder(context, NewsFeedDatabase::class.java, DB_NAME).build()
     }
 }

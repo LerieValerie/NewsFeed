@@ -2,10 +2,10 @@ package com.lerie_valerie.newsfeed.data.local.repository
 
 import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
-import com.lerie_valerie.newsfeed.domain.repository.KeyRepository
 import javax.inject.Inject
 
-class KeyPagingRepositoryImpl @Inject constructor(private val dbInstance: NewsFeedDatabase) : KeyPagingRepository {
+class KeyPagingRepositoryImpl @Inject constructor(private val dbInstance: NewsFeedDatabase) :
+    KeyPagingRepository {
     override suspend fun insertKey(key: KeyModel) =
         dbInstance.keyDao().insertKey(key)
 

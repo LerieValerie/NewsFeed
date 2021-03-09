@@ -27,5 +27,5 @@ fun ArticleModel.toEntity() = Article(
 private fun Instant.toLong(): Long = this.toEpochMilliseconds()
 
 private fun Long.toInstant() = this.let {
-        Instant.fromEpochMilliseconds(it)
+    Instant.fromEpochMilliseconds(it)
 }

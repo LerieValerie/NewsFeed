@@ -16,7 +16,7 @@ data class ArticleResponse(
         key = key,
         title = title,
         description = description,
-        date = date?.let { it.toInstant()},
+        date = date?.let { it.toInstant() },
         urlToImage = urlToImage,
         url = url
     )

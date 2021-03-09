@@ -3,7 +3,7 @@ package com.lerie_valerie.newsfeed.presentation.view
 import com.lerie_valerie.newsfeed.domain.entity.Article
 import com.lerie_valerie.newsfeed.presentation.formatter.DateTimeFormatter
 
-data class ArticleView (
+data class ArticleView(
     val id: Int,
     val key: Int,
     val title: String?,
