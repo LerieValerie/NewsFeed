@@ -6,9 +6,6 @@ import javax.inject.Inject
 
 class SendDatabaseClearUseCase @Inject constructor(private val eventRepository: EventRepository) {
 
-    suspend operator fun invoke() {
-//        (eventRepository.eventFlow as MutableSharedFlow).emit(EventRepository.Event.ClearDatabase())
-
+    suspend operator fun invoke() =
         eventRepository.sendEvent(EventRepository.Event.ClearDatabase())
-    }
 }

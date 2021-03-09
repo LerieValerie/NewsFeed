@@ -1,17 +1,16 @@
 package com.lerie_valerie.newsfeed.di
 
 import android.content.Context
-import com.lerie_valerie.newsfeed.data.paging.repository.ArticleFromRemoteToLocalRepositoryImpl
 import com.lerie_valerie.newsfeed.data.local.NewsFeedDatabase
-import com.lerie_valerie.newsfeed.data.coil.CoilBuilder
-import com.lerie_valerie.newsfeed.data.coil.ImageLoader
-import com.lerie_valerie.newsfeed.data.coil.repository.*
 import com.lerie_valerie.newsfeed.data.local.repository.*
+import com.lerie_valerie.newsfeed.data.paging.repository.ArticleFromRemoteToLocalRepositoryImpl
 import com.lerie_valerie.newsfeed.data.remote.retrofit.NetInterface
 import com.lerie_valerie.newsfeed.data.remote.retrofit.RetrofitBuilder
-import com.lerie_valerie.newsfeed.domain.repository.*
+import com.lerie_valerie.newsfeed.domain.repository.ArticleFromRemoteToLocalRepository
+import com.lerie_valerie.newsfeed.domain.repository.ArticleRepository
+import com.lerie_valerie.newsfeed.domain.repository.EventRepository
+import com.lerie_valerie.newsfeed.domain.repository.KeyRepository
 import dagger.Binds
-import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,12 +26,12 @@ abstract class DataModule {
         @Singleton
         @Provides
         fun provideDatabase(@ApplicationContext appContext: Context): NewsFeedDatabase =
-                NewsFeedDatabase.newInstance(appContext)
+            NewsFeedDatabase.newInstance(appContext)
 
         @Singleton
         @Provides
         fun provideNetInterface(): NetInterface =
-                RetrofitBuilder.buildApi()
+            RetrofitBuilder.buildApi()
 
 //        @Singleton
 //        @Provides
@@ -52,7 +51,7 @@ abstract class DataModule {
     @Singleton
     @Binds
     abstract fun provideArticleFromRemoteToLocalRepository(
-            repositoryImpl: ArticleFromRemoteToLocalRepositoryImpl
+        repositoryImpl: ArticleFromRemoteToLocalRepositoryImpl
     ): ArticleFromRemoteToLocalRepository
 
     @Singleton

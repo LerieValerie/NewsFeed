@@ -17,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsFeedRosterViewModel @Inject constructor(
     private val loadArticleRemote: GetPagingArticleUseCase,
-    private val getBitmapFromStorage: GetBitmapFromStorageUseCase,
     private val clearDatabase: ClearDatabaseUseCase,
     private val getEventFlow: GetEventFlowUseCase
 ) : ViewModel() {
@@ -40,8 +39,6 @@ class NewsFeedRosterViewModel @Inject constructor(
 //            }
 //        }.cachedIn(viewModelScope).asLiveData()
 
-    fun getImageFromStorage(imageName: String?) =
-        getBitmapFromStorage(imageName)
 
 
     fun clearAll() {

@@ -1,8 +1,5 @@
 package com.lerie_valerie.newsfeed.presentation.roster
 
-//import androidx.core.view.isVisible
-
-//import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -21,15 +18,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.lerie_valerie.newsfeed.R
 import com.lerie_valerie.newsfeed.databinding.FragmentNewsFeedRosterBinding
 import com.lerie_valerie.newsfeed.domain.repository.EventRepository
-import com.lerie_valerie.newsfeed.logg
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 
-
+@FlowPreview
 @AndroidEntryPoint
 class NewsFeedRosterFragment : Fragment() {
     private val viewModel: NewsFeedRosterViewModel by viewModels()
@@ -149,9 +145,11 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun adapterStateInit() {
-            adapterNews.loadStateFlow.debounce(100).asLiveData().observe(viewLifecycleOwner) { loadState ->
+        adapterNews.loadStateFlow.debounce(100).asLiveData()
+            .observe(viewLifecycleOwner) { loadState ->
 
-                binding.progressBar.isVisible = loadState.refresh is Loading && adapterLoader.itemCount == 0
+                binding.progressBar.isVisible =
+                    loadState.refresh is Loading && adapterLoader.itemCount == 0
 
                 val errorState =
                     loadState.append as? Error
@@ -169,8 +167,8 @@ class NewsFeedRosterFragment : Fragment() {
 
     private fun setBottomSheetBehaviour() {
 
-        binding.bottomSheetLayout?.let {
-            BottomSheetBehavior.from(it)?.let { bsb ->
+        binding.bottomSheetLayout.let {
+            BottomSheetBehavior.from(it).let { bsb ->
                 bsb.state = BottomSheetBehavior.STATE_HIDDEN
                 bsb.saveFlags = BottomSheetBehavior.SAVE_ALL
 
@@ -180,9 +178,9 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun setBtnRetryListener() {
-            binding.btnRetry.setOnClickListener {
-                adapterNews.retry()
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            }
+        binding.btnRetry.setOnClickListener {
+            adapterNews.retry()
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
         }
+    }
 }
