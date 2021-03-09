@@ -9,4 +9,5 @@
     <string name="snackbar_retry">Retry</string>
     <string name="snackBarLoading">Loading</string>
     <string name="retry">Retry</string>
+    <string name="developer_options">Developer options</string>
 </resources>
