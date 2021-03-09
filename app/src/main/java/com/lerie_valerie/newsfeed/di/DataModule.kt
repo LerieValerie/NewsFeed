@@ -34,15 +34,15 @@ abstract class DataModule {
         fun provideNetInterface(): NetInterface =
                 RetrofitBuilder.buildApi()
 
-        @Singleton
-        @Provides
-        fun provideCoilBuilder(@ApplicationContext appContext: Context) =
-            CoilBuilder.build(appContext)
-
-        @Singleton
-        @Provides
-        fun provideCoilImageLoader(@ApplicationContext appContext: Context) =
-            ImageLoader.build(appContext)
+//        @Singleton
+//        @Provides
+//        fun provideCoilBuilder(@ApplicationContext appContext: Context) =
+//            CoilBuilder.build(appContext)
+//
+//        @Singleton
+//        @Provides
+//        fun provideCoilImageLoader(@ApplicationContext appContext: Context) =
+//            ImageLoader.build(appContext)
 
 //        @Singleton
 //        @Provides
@@ -61,11 +61,11 @@ abstract class DataModule {
         @ApplicationContext appContext: Context
     ): Context
 
-    @Singleton
-    @Binds
-    abstract fun provideBitmapRepository(
-        repositoryImpl: BitmapRepositoryImpl
-    ): BitmapRepository
+//    @Singleton
+//    @Binds
+//    abstract fun provideBitmapRepository(
+//        repositoryImpl: BitmapRepositoryImpl
+//    ): BitmapRepository
 
     @Singleton
     @Binds

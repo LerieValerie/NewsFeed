@@ -8,4 +8,5 @@
     <string name="load">Reload</string>
     <string name="snackbar_retry">Retry</string>
     <string name="snackBarLoading">Loading</string>
+    <string name="retry">Retry</string>
 </resources>
