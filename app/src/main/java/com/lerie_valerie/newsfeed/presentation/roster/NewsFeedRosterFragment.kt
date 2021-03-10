@@ -21,6 +21,7 @@ import com.lerie_valerie.newsfeed.domain.repository.EventRepository
 import com.lerie_valerie.newsfeed.presentation.view.ArticleView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -42,6 +43,7 @@ class NewsFeedRosterFragment : Fragment() {
 
         adapterInit()
         setArticleObservation()
+        setEventObservation()
     }
 
     override fun onCreateView(
@@ -67,7 +69,7 @@ class NewsFeedRosterFragment : Fragment() {
         }
 
         adapterLoaderInit()
-        setEventObservation()
+//        setEventObservation()
         setBottomSheetBehaviour()
         setBtnRetryListener()
         adapterStateInit()
@@ -117,10 +119,19 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun setEventObservation() {
-        viewModel.events.asLiveData().observe(viewLifecycleOwner) {
-            when (it) {
-                is EventRepository.Event.ClearDatabase -> {
-                    adapterNews.refresh()
+//        viewModel.events.asLiveData().observe(viewLifecycleOwner) {
+//            when (it) {
+//                is EventRepository.Event.ClearDatabase -> {
+//                    adapterNews.refresh()
+//                }
+//            }
+//        }
+        lifecycleScope.launchWhenResumed {
+            viewModel.events.collect {
+                when (it) {
+                    is EventRepository.Event.ClearDatabase -> {
+                        adapterNews.refresh()
+                    }
                 }
             }
         }
@@ -147,7 +158,7 @@ class NewsFeedRosterFragment : Fragment() {
                         ?: loadState.refresh as? Error
 
                 if (errorState != null) {
-                    binding.errorText.text = "${errorState.error}"
+                    binding.errorText.text = "${errorState.error.message}"
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
