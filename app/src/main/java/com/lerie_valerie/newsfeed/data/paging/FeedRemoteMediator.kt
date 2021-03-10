@@ -4,10 +4,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.lerie_valerie.newsfeed.Constant.Companion.C_ApiKey
-import com.lerie_valerie.newsfeed.Constant.Companion.C_From
-import com.lerie_valerie.newsfeed.Constant.Companion.C_Query
-import com.lerie_valerie.newsfeed.Constant.Companion.C_Sort
 import com.lerie_valerie.newsfeed.data.local.converter.toModel
 import com.lerie_valerie.newsfeed.data.local.model.ArticleModel
 import com.lerie_valerie.newsfeed.data.local.model.KeyModel
@@ -27,6 +23,12 @@ class FeedRemoteMediator @Inject constructor(
 
     companion object {
         private const val C_Default_Page = 1
+
+        private const val C_Query = "android"
+        private const val C_ApiKey = "2bb5f673d126444da2ed6b70a0fc5b1d"
+//        private const val C_ApiKey = "631dff9582c04fb5b7f234174ad7dbd8"
+        private const val C_From = "2019-04-00"
+        private const val C_Sort = "publi shedAt"
     }
 
     override suspend fun load(
@@ -34,7 +36,7 @@ class FeedRemoteMediator @Inject constructor(
         state: PagingState<Int, ArticleModel>
     ): MediatorResult {
         return try {
-            val page = getKeyPage(loadType, state)
+            val page = getKeyPage(loadType)
 
             if (page != null) {
                 val response = api.getNewsFeed(
@@ -72,7 +74,7 @@ class FeedRemoteMediator @Inject constructor(
     private suspend fun getKey() =
         keyPagingRepository.getKeyList().firstOrNull()
 
-    private suspend fun getKeyPage(loadType: LoadType, state: PagingState<Int, ArticleModel>) =
+    private suspend fun getKeyPage(loadType: LoadType) =
         when (loadType) {
             LoadType.REFRESH -> {
                 val keyModel = getKey()

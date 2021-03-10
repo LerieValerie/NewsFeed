@@ -69,7 +69,6 @@ class NewsFeedRosterFragment : Fragment() {
         }
 
         adapterLoaderInit()
-//        setEventObservation()
         setBottomSheetBehaviour()
         setBtnRetryListener()
         adapterStateInit()
@@ -119,13 +118,6 @@ class NewsFeedRosterFragment : Fragment() {
     }
 
     private fun setEventObservation() {
-//        viewModel.events.asLiveData().observe(viewLifecycleOwner) {
-//            when (it) {
-//                is EventRepository.Event.ClearDatabase -> {
-//                    adapterNews.refresh()
-//                }
-//            }
-//        }
         lifecycleScope.launchWhenResumed {
             viewModel.events.collect {
                 when (it) {
@@ -158,13 +150,30 @@ class NewsFeedRosterFragment : Fragment() {
                         ?: loadState.refresh as? Error
 
                 if (errorState != null) {
-                    binding.errorText.text = "${errorState.error.message}"
+                    val errorMessage = errorState.error.message?.let { getErrorMessage(it) }
+
+                    binding.errorText.text = errorMessage
+
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
                 }
             }
     }
+
+    private fun getErrorMessage(error: String) =
+        when {
+            error.contains("426") -> {
+                getString(R.string.error_426)
+            }
+            error.contains("429") -> {
+                getString(R.string.error_429)
+            }
+            else -> {
+                error
+            }
+        }
+
 
     private fun setBottomSheetBehaviour() {
         binding.bottomSheetLayout.let {

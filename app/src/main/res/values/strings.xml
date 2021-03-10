@@ -7,4 +7,6 @@
     <string name="load">Reload</string>
     <string name="retry">Retry</string>
     <string name="developer_options">Developer options</string>
+    <string name="error_429">HTTP 429 - Too many requests</string>
+    <string name="error_426">HTTP 426 - Upgrade required</string>
 </resources>
