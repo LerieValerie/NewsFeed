@@ -17,7 +17,7 @@
 
 Список новостей находятся по этому адресу:
 
-https://newsapi.org/v2/everything?q=android&from=2019-04-00&sortBy=publi shedAt&apiKey=631dff9582c04fb5b7f234174ad7dbd8&page={page c 1 до 5}
+https://newsapi.org/v2/everything?q=android&from=2019-04-00&sortBy=publi shedAt&apiKey=2bb5f673d126444da2ed6b70a0fc5b1d8&page={page c 1 до 5}
 
 Приложение должно получить данные по сети. Сохранить их в БД (SQLite).
 
