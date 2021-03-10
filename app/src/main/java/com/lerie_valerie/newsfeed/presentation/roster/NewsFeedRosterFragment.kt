@@ -169,6 +169,9 @@ class NewsFeedRosterFragment : Fragment() {
             error.contains("429") -> {
                 getString(R.string.error_429)
             }
+            error.contains("401") -> {
+                getString(R.string.error_401)
+            }
             else -> {
                 error
             }
