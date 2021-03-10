@@ -25,7 +25,7 @@ class FeedRemoteMediator @Inject constructor(
         private const val C_Default_Page = 1
 
         private const val C_Query = "android"
-        private const val C_ApiKey = "631dff9582c04fb5b7f234174ad7dbd8"
+        private const val C_ApiKey = "2bb5f673d126444da2ed6b70a0fc5b1d"
         private const val C_From = "2019-04-00"
         private const val C_Sort = "publi shedAt"
     }
