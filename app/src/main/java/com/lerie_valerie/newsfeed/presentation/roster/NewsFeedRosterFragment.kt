@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import retrofit2.HttpException
 
 @FlowPreview
 @AndroidEntryPoint
@@ -150,10 +151,8 @@ class NewsFeedRosterFragment : Fragment() {
                         ?: loadState.refresh as? Error
 
                 if (errorState != null) {
-                    val errorMessage = errorState.error.message?.let { getErrorMessage(it) }
-
+                    val errorMessage = getErrorMessage(errorState.error)
                     binding.errorText.text = errorMessage
-
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -161,22 +160,17 @@ class NewsFeedRosterFragment : Fragment() {
             }
     }
 
-    private fun getErrorMessage(error: String) =
-        when {
-            error.contains("426") -> {
-                getString(R.string.error_426)
-            }
-            error.contains("429") -> {
-                getString(R.string.error_429)
-            }
-            error.contains("401") -> {
-                getString(R.string.error_401)
-            }
-            else -> {
-                error
-            }
+    private fun getErrorMessage(throwable: Throwable) =
+        when (throwable) {
+            is HttpException ->
+                when(throwable.code()) {
+                    401 -> getString(R.string.error_401)
+                    426 -> getString(R.string.error_426)
+                    429 -> getString(R.string.error_429)
+                    else -> throwable.message
+                }
+            else -> throwable.message
         }
-
 
     private fun setBottomSheetBehaviour() {
         binding.bottomSheetLayout.let {
